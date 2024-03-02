@@ -1,0 +1,73 @@
+<ion-header class="ion-container">
+  <ion-toolbar>
+    <div class="toolbar-box">
+      <ion-buttons slot="start" class="ion-no-padding">
+        <ion-button>
+          <ion-icon color="secondary" name="finger-print-outline"></ion-icon>
+          <ion-searchbar
+            color="tertiary"
+            class="ion-hide-lg-down"
+            placeholder="Search"
+          ></ion-searchbar>
+        </ion-button>
+      </ion-buttons>
+      <ion-grid>
+        <ion-row class="ion-justify-content-end">
+          <ion-col size="auto">
+            <ion-icon name="home"></ion-icon>
+            <div>Home</div>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-icon name="people"></ion-icon>
+            <div>My network</div>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-icon name="chatbox-ellipses"></ion-icon>
+            <div>Messaging</div>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-icon name="notifications"> </ion-icon>
+            <ion-badge
+              color="danger"
+              style="
+                position: absolute;
+                margin-left: -10px;
+                margin-top: -5px;
+                height: 16px;
+                width: 16px;
+                border-radius: 50%;
+              "
+              >2</ion-badge
+            >
+            <div>Notifications</div>
+          </ion-col>
+          <ion-col
+            style="cursor: pointer"
+            class="popover-menu"
+            (click)="presentPopover($event)"
+            size="auto"
+          >
+            <ion-avatar>
+              <ion-img
+                src="https://media.istockphoto.com/id/1464547366/fi/valokuva/liikemies-ajattelee-tai-tarkistaa-aikaa-kahvilassa-kahvilassa-tai-ravintolassa-my%C3%B6h%C3%A4iseen.jpg?s=2048x2048&w=is&k=20&c=nOqdOiEoHKN6i2xe-mxvIiqXelsJqLW3YCOoJWlEwTU="
+              ></ion-img>
+            </ion-avatar>
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              Me
+              <ion-icon
+                style="font-size: 16px"
+                name="caret-down-outline"
+              ></ion-icon>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-toolbar>
+</ion-header>

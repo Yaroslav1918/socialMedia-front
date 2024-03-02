@@ -1,0 +1,31 @@
+.toolbar-box {
+  display: flex;
+  margin: auto;
+  max-width: 1200px;
+}
+
+ion-searchbar {
+  --box-shadow: none;
+  transform: scale(0.8);
+  margin-left: -20px;
+}
+
+ion-col div, ion-badge {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+ion-icon {
+  font-size: 24px;
+}
+
+ion-col {
+  width: 80px !important;
+  text-align: center;
+}
+
+ion-avatar {
+  width: 29px;
+  height: 29px;
+  margin: auto;
+}
