@@ -1,0 +1,56 @@
+<section>
+  <div class="container">
+    <div class="home-container">
+      <h1>Welcome to your professional community</h1>
+      <form #form="ngForm" (ngSubmit)="onSubmit()">
+        <ion-input
+          label="Email"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Enter email"
+          #emailInput="ngModel"
+          ngModel
+          type="email"
+          name="email"
+          required
+        ></ion-input>
+
+        <ion-text color="danger" *ngIf="!emailInput.valid && emailInput.touched"
+          >Please enter your email address.</ion-text
+        >
+
+        <ion-input
+          label="Password"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Enter password"
+          #passwordInput="ngModel"
+          ngModel
+          type="password"
+          name="password"
+          required
+        ></ion-input>
+
+        <ion-text
+          color="danger"
+          *ngIf="!passwordInput.valid && passwordInput.touched"
+          >Please enter your password.</ion-text
+        >
+
+        <ion-button
+          [disabled]="!form.valid"
+          type="submit"
+          shape="round"
+          expand="block"
+        >
+          Sign in
+        </ion-button>
+      </form>
+    </div>
+
+    <img
+      src="https://static.licdn.com/aero-v1/sc/h/dxf91zhqd2z6b0bwg85ktm5s4"
+      alt="hero"
+    />
+  </div>
+</section>

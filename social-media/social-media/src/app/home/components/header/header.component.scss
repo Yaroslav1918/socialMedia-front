@@ -4,13 +4,21 @@
   max-width: 1200px;
 }
 
+.toolbar-box-isNotLoggedIn {
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  max-width: 1200px;
+}
+
 ion-searchbar {
   --box-shadow: none;
   transform: scale(0.8);
   margin-left: -20px;
 }
 
-ion-col div, ion-badge {
+ion-col div,
+ion-badge {
   font-size: 12px;
   font-weight: 400;
 }
@@ -28,4 +36,22 @@ ion-avatar {
   width: 29px;
   height: 29px;
   margin: auto;
+}
+
+ion-list {
+  display: flex;
+  padding: 0;
+}
+
+.auth-button {
+  background-color: none;
+  border: none;
+  border-radius: 24px; /* Rounded corners */
+  padding: 8px;
+  &:nth-child(2) {
+    border: 1px solid #0a66c2;
+  }
+  &:hover {
+    background-color: #cae2fa;
+  }
 }

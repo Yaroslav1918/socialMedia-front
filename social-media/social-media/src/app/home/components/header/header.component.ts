@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
-import { PopoverComponent } from './popover/popover.component';
+import { PopoverComponent } from "./popover/popover.component";
 
 @Component({
   selector: "app-header",
@@ -9,7 +9,7 @@ import { PopoverComponent } from './popover/popover.component';
 })
 export class HeaderComponent implements OnInit {
   constructor(public popoverController: PopoverController) {}
-
+  isLoggedIn: boolean = false;
   ngOnInit() {}
 
   async presentPopover(ev: any) {

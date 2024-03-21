@@ -1,0 +1,33 @@
+h2 {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px 16px;
+  font-size: 30px;
+  text-align: center;
+}
+
+form {
+  max-width: 400px;
+  margin: auto;
+  ion-card {
+    box-shadow: none;
+    border: 1px solid #e1e1e1;
+    padding: 24px;
+  }
+}
+
+ion-input {
+  margin-bottom: 15px;
+}
+
+.toggle-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .toggle-auth-text {
+    margin-left: 8px;
+    cursor: pointer;
+  }
+}

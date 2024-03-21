@@ -1,0 +1,16 @@
+ion-card {
+  width: 230px;
+  box-shadow: none;
+  border: 1px solid #e1e1e1;
+}
+
+.backdrop {
+  height: 84px;
+  display: flex;
+  background-color: #bcd4e4; /* Add your preferred background color */
+}
+
+ion-card ion-avatar {
+  display: block;
+  margin: auto;
+}
