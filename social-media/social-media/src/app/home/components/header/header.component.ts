@@ -1,3 +1,4 @@
+import { AuthService } from "./../../../auth/services/auth.service";
 import { Component, OnInit } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "./popover/popover.component";
@@ -8,9 +9,22 @@ import { PopoverComponent } from "./popover/popover.component";
   styleUrls: ["./header.component.scss"],
 })
 export class HeaderComponent implements OnInit {
-  constructor(public popoverController: PopoverController) {}
-  isLoggedIn: boolean = false;
-  ngOnInit() {}
+  isLoggedIn!: boolean;
+
+  constructor(
+    public popoverController: PopoverController,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit() {
+    this.authService.isTokenInStorage().subscribe((loggedIn: boolean) => {
+      console.log(
+        "🚀 ~ HeaderComponent ~ this.authService.isTokenInStorage().subscribe ~ loggedIn:",
+        loggedIn
+      );
+      this.isLoggedIn = loggedIn;
+    });
+  }
 
   async presentPopover(ev: any) {
     const popover = await this.popoverController.create({

@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { AuthService } from "./services/auth.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-auth",
@@ -8,22 +10,34 @@ import { NgForm } from "@angular/forms";
 })
 export class AuthPage implements OnInit {
   @ViewChild("form") form!: NgForm;
-  constructor() {}
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
   submissionType: "login" | "join" = "join";
-  ngOnInit() {}
+
+  ngOnInit() {
+    this.route.params.subscribe((params) => {
+      this.submissionType = params["path"];
+    });
+  }
+
   onSubmit() {
     const { email, password, firstName, lastName } = this.form.value;
     if (this.submissionType === "login") {
-      console.log(email, password);
+      this.authService.signIn(email, password).subscribe(() => {
+        this.router.navigateByUrl("/feed");
+      });
     } else if (this.submissionType === "join") {
       const newUser = { firstName, lastName, email, password };
-      console.log(newUser);
+      this.authService.signUp(newUser).subscribe(() => this.toggleText());
     }
     this.form.reset();
   }
 
   toggleText() {
-    console.log(this.submissionType);
     this.submissionType = this.submissionType === "login" ? "join" : "login";
+    this.router.navigate(["/auth", this.submissionType]);
   }
 }

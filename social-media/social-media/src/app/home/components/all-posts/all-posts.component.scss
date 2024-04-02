@@ -1,0 +1,25 @@
+.all-posts-container {
+  display: flex;
+}
+ion-card-header {
+  display: flex;
+  flex-direction: row;
+  ion-avatar {
+    width: 48px;
+    height: 48px;
+    margin-right: 10px;
+  }
+}
+
+ion-list {
+  display: flex;
+  padding: 0px;
+
+  ion-icon {
+    margin-right: 5px;
+  }
+}
+
+ion-card {
+  padding: 15px;
+}

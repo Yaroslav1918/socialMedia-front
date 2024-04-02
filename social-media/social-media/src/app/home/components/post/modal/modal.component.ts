@@ -23,6 +23,7 @@ export class ModalComponent implements OnInit {
   onSubmit() {
     if (!this.form.valid) return;
     const body = this.form.value["body"];
+ 
     this.modalController.dismiss(
       {
         post: {

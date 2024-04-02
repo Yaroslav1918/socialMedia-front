@@ -14,7 +14,7 @@ export class PostComponent implements OnInit {
   ngOnInit() {}
   async openModal() {
     const modal = await this.modalController.create({
-      component: ModalComponent, // Your modal component
+      component: ModalComponent,
       cssClass: "modal",
     });
     await modal.present();

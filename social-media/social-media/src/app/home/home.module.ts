@@ -13,6 +13,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ModalComponent } from './components/post/modal/modal.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { AllPostsComponent } from './components/all-posts/all-posts.component';
 
 
 
@@ -28,7 +30,8 @@ import { FooterComponent } from './components/footer/footer.component';
     ModalComponent,
     WelcomeComponent,
     FooterComponent,
-    
+    UserProfileComponent,
+    AllPostsComponent
   ],
 })
 export class HomePageModule {}

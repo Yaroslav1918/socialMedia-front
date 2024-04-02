@@ -75,7 +75,7 @@
       <div class="title-container">
         
         <ion-buttons slot="start" class="ion-no-padding">
-          <ion-button style="cursor: pointer" [routerLink]="['/home']">
+          <ion-button style="cursor: pointer" [routerLink]="['/']">
             <ion-text color="primary" class="linkedin-text">Linked</ion-text>
             <ion-icon
               color="primary"
@@ -89,8 +89,8 @@
       <ion-list>
         <ion-item>
           <ion-buttons>
-            <ion-button class="auth-button" slot="start">Join now</ion-button>
-            <ion-button class="auth-button" slot="end">Sign In</ion-button>
+            <ion-button class="auth-button" slot="start" [routerLink]="['/auth/join']"  >Join now</ion-button>
+            <ion-button class="auth-button" slot="end" [routerLink]="['/auth/login']" >Sign In</ion-button>
           </ion-buttons>
         </ion-item>
       </ion-list>
