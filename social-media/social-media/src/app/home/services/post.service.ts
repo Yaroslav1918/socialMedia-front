@@ -20,13 +20,13 @@ export class PostService {
 
   updatePost(body: string, postId: number) {
     return this.http
-      .put(`${environment.baseApiUrl}/posts${postId}`, { body })
+      .put(`${environment.baseApiUrl}/posts/${postId}`, { body })
       .pipe(take(1));
   }
 
  deletePost(postId: number) {
     return this.http
-      .delete(`${environment.baseApiUrl}/posts${postId}`)
+      .delete(`${environment.baseApiUrl}/posts/${postId}`)
       .pipe(take(1));
   }
 }

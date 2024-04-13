@@ -11,7 +11,7 @@ const routes: Routes = [
     component: HomePage,
     children: [
       { path: "", component: WelcomeComponent },
-      { path: "feed", component: UserProfileComponent, canLoad: [AuthGuard] },
+      { path: "feed", component: UserProfileComponent,  canActivate: [AuthGuard] },
     ],
   },
 ];

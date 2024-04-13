@@ -1,4 +1,3 @@
-
 ion-card {
   width: 525px;
   box-shadow: none;
@@ -44,4 +43,7 @@ span.ion-text-left {
 ion-card-content {
   display: flex;
   justify-content: space-between;
+  ion-icon {
+    margin-right: 5px;
+  }
 }

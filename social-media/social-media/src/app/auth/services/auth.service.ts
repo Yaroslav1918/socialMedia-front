@@ -2,10 +2,18 @@ import { environment } from "./../../../environments/environment.prod";
 import { Injectable } from "@angular/core";
 import { NewUser } from "../models/newUser.model";
 import { HttpClient } from "@angular/common/http";
-import { Storage } from "@ionic/storage-angular";
 import { jwtDecode } from "jwt-decode";
 
-import { BehaviorSubject, Observable, from, map, of, switchMap, take, tap } from "rxjs";
+import {
+  BehaviorSubject,
+  Observable,
+  from,
+  map,
+  of,
+  switchMap,
+  take,
+  tap,
+} from "rxjs";
 import { User } from "../models/user.model";
 import { UserResponse } from "../models/userResponse.model";
 import { Router } from "@angular/router";
@@ -15,16 +23,20 @@ import { Router } from "@angular/router";
 })
 export class AuthService {
   private user$ = new BehaviorSubject<User | null>(null);
-  constructor(
-    private http: HttpClient,
-    private router: Router
-  ) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   get isUserLoggedIn(): Observable<boolean> {
     return this.user$.asObservable().pipe(
       switchMap((user) => {
-        console.log("🚀 ~ AuthService ~ switchMap ~ user:", user)
         return of(user !== null);
+      })
+    );
+  }
+
+  get userId(): Observable<number | null> {
+    return this.user$.asObservable().pipe(
+      switchMap((user: User | null) => {
+        return of(user?.id ?? null);
       })
     );
   }
@@ -34,6 +46,7 @@ export class AuthService {
       .post<User>(`${environment.baseApiUrl}/auth/register`, newUser)
       .pipe(take(1));
   }
+
   signIn(
     email: string,
     password: string
@@ -56,18 +69,18 @@ export class AuthService {
   isTokenInStorage(): Observable<boolean> {
     return of(localStorage.getItem("token")).pipe(
       map((token: string | null) => {
-        if (!token) return false; 
+        if (!token) return false;
         const decodedToken: UserResponse = jwtDecode(token);
         const jwtExpirationInMsSinceUnixEpoch = decodedToken.exp * 1000;
         const isExpired =
           new Date() > new Date(jwtExpirationInMsSinceUnixEpoch);
 
-        if (isExpired) return false; 
+        if (isExpired) return false;
         if (decodedToken) {
           this.user$.next(decodedToken);
-          return true; 
+          return true;
         }
-        return false; 
+        return false;
       })
     );
   }
