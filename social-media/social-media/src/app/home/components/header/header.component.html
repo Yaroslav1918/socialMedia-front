@@ -1,5 +1,5 @@
 <ion-header class="ion-container">
-  <ion-toolbar *ngIf="isLoggedIn">
+  <ion-toolbar *ngIf="(authService.isUserLoggedIn | async) === true">
     <div class="toolbar-box">
       <ion-buttons slot="start" class="ion-no-padding">
         <ion-button>
@@ -49,7 +49,10 @@
           >
             <ion-avatar>
               <ion-img
-                src="https://media.istockphoto.com/id/1464547366/fi/valokuva/liikemies-ajattelee-tai-tarkistaa-aikaa-kahvilassa-kahvilassa-tai-ravintolassa-my%C3%B6h%C3%A4iseen.jpg?s=2048x2048&w=is&k=20&c=nOqdOiEoHKN6i2xe-mxvIiqXelsJqLW3YCOoJWlEwTU="
+                [src]="
+                imageUrl ||
+                'https://ionicframework.com/docs/img/demos/avatar.svg'
+              "
               ></ion-img>
             </ion-avatar>
             <div
@@ -70,7 +73,7 @@
       </ion-grid>
     </div>
   </ion-toolbar>
-  <ion-toolbar *ngIf="!isLoggedIn">
+  <ion-toolbar *ngIf="(authService.isUserLoggedIn | async) === false">
     <div class="toolbar-box-isNotLoggedIn">
       <div class="title-container">
         

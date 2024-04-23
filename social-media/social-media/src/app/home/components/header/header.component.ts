@@ -3,26 +3,22 @@ import { Component, OnInit } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "./popover/popover.component";
 
+
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.scss"],
 })
 export class HeaderComponent implements OnInit {
-  isLoggedIn!: boolean;
-
+  imageUrl!: string | null;
   constructor(
     public popoverController: PopoverController,
-    private authService: AuthService
+    public authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.authService.isTokenInStorage().subscribe((loggedIn: boolean) => {
-      console.log(
-        "🚀 ~ HeaderComponent ~ this.authService.isTokenInStorage().subscribe ~ loggedIn:",
-        loggedIn
-      );
-      this.isLoggedIn = loggedIn;
+    this.authService.getImageUrl().subscribe((imageUrl: string | null) => {
+      this.imageUrl = imageUrl;
     });
   }
 
@@ -36,6 +32,5 @@ export class HeaderComponent implements OnInit {
     await popover.present();
 
     const { role } = await popover.onDidDismiss();
-    console.log("onDidDismiss resolved with role", role);
   }
 }

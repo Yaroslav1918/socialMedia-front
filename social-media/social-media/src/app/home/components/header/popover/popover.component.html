@@ -5,13 +5,15 @@
         <ion-col size="auto">
           <ion-avatar>
             <ion-img
-              src="https://media.istockphoto.com/id/1464547366/fi/valokuva/liikemies-ajattelee-tai-tarkistaa-aikaa-kahvilassa-kahvilassa-tai-ravintolassa-my%C3%B6h%C3%A4iseen.jpg?s=2048x2048&w=is&k=20&c=nOqdOiEoHKN6i2xe-mxvIiqXelsJqLW3YCOoJWlEwTU="
+               [src]="
+                imageUrl ||
+                'https://ionicframework.com/docs/img/demos/avatar.svg'
+              "
             ></ion-img>
           </ion-avatar>
         </ion-col>
         <ion-col>
-          <ion-card-title>dfdf </ion-card-title>
-          <ion-card-subtitle>Full Stack Developer</ion-card-subtitle>
+          <ion-card-title>{{fullName}} </ion-card-title>
         </ion-col>
       </ion-row>
     </ion-grid>

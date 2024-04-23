@@ -23,7 +23,12 @@ import { Router } from "@angular/router";
 })
 export class AuthService {
   private user$ = new BehaviorSubject<User | null>(null);
-  constructor(private http: HttpClient, private router: Router) {}
+  private imageUrl$ = new BehaviorSubject<string | null>(null);
+  constructor(private http: HttpClient, private router: Router) {
+    this.getUserImage().subscribe((imageUrl: string | null) => {
+      this.imageUrl$.next(imageUrl);
+    });
+  }
 
   get isUserLoggedIn(): Observable<boolean> {
     return this.user$.asObservable().pipe(
@@ -33,6 +38,10 @@ export class AuthService {
     );
   }
 
+
+  getImageUrl(): Observable<string | null> {
+    return this.imageUrl$.asObservable();
+  }
   get userId(): Observable<number | null> {
     return this.user$.asObservable().pipe(
       switchMap((user: User | null) => {
@@ -74,7 +83,6 @@ export class AuthService {
         const jwtExpirationInMsSinceUnixEpoch = decodedToken.exp * 1000;
         const isExpired =
           new Date() > new Date(jwtExpirationInMsSinceUnixEpoch);
-
         if (isExpired) return false;
         if (decodedToken) {
           this.user$.next(decodedToken);
@@ -89,5 +97,53 @@ export class AuthService {
     this.user$.next(null);
     localStorage.removeItem("token");
     this.router.navigateByUrl("/auth/login");
+  }
+
+  uploadUserImage(
+    formData: FormData
+  ): Observable<{ modifiedFileName: string }> {
+    return this.http
+      .post<{ modifiedFileName: string }>(
+        `${environment.baseApiUrl}/users/upload`,
+        formData
+      )
+      .pipe(take(1));
+  }
+
+  getUserImage() {
+    return this.http
+      .get(`${environment.baseApiUrl}/users/image`, {
+        responseType: "blob",
+      })
+      .pipe(
+        map((data) => {
+          return URL.createObjectURL(data);
+        }),
+        take(1)
+      );
+  }
+
+  setImageUrl(imageUrl: string) {
+    this.imageUrl$.next(imageUrl);
+  }
+  // getImageUrl(): Observable<string | null> {
+  //   return this.user$.pipe(
+  //     take(1),
+  //     map((user: User | null) => {
+  //       return user && user.imagePath ? user.imagePath : null;
+  //     })
+  //   );
+  // }
+
+  get userFullName(): Observable<string> {
+    return this.user$.asObservable().pipe(
+      switchMap((user: User | null) => {
+        if (!user) {
+          return of();
+        }
+        const fullName = user.firstName + " " + user.lastName;
+        return of(fullName);
+      })
+    );
   }
 }

@@ -10,7 +10,7 @@ const routes: Routes = [
     path: "",
     component: HomePage,
     children: [
-      { path: "", component: WelcomeComponent },
+      { path: "", component: WelcomeComponent, },
       { path: "feed", component: UserProfileComponent,  canActivate: [AuthGuard] },
     ],
   },

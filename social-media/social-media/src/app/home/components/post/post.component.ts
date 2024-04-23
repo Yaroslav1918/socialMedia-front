@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { ModalComponent } from "./modal/modal.component";
+import { AuthService } from "../../../auth/services/auth.service";
 
 @Component({
   selector: "app-post",
@@ -9,9 +10,18 @@ import { ModalComponent } from "./modal/modal.component";
 })
 export class PostComponent implements OnInit {
   @Output() create: EventEmitter<any> = new EventEmitter();
-  constructor(private modalController: ModalController) {}
+  imageUrl!: string | null;
+  fullName = "";
+  constructor(
+    private modalController: ModalController,
+    private authService: AuthService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.getImageUrl().subscribe((imageUrl: string | null) => {
+      this.imageUrl = imageUrl;
+    });
+  }
   async openModal() {
     const modal = await this.modalController.create({
       component: ModalComponent,
@@ -23,5 +33,4 @@ export class PostComponent implements OnInit {
     if (!data) return;
     this.create.emit(data.post.body);
   }
- 
 }

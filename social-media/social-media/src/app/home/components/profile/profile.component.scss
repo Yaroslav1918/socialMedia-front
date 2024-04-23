@@ -4,10 +4,15 @@ ion-card {
   border: 1px solid #e1e1e1;
 }
 
+ion-avatar {
+width: 80px;
+height: 80px;
+cursor: pointer
+}
 .backdrop {
   height: 84px;
   display: flex;
-  background-color: #bcd4e4; /* Add your preferred background color */
+  background-color: #bcd4e4;
 }
 
 ion-card ion-avatar {
