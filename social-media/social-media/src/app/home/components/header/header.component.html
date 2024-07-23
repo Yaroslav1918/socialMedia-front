@@ -2,30 +2,53 @@
   <ion-toolbar *ngIf="(authService.isUserLoggedIn | async) === true">
     <div class="toolbar-box">
       <ion-buttons slot="start" class="ion-no-padding">
-        <ion-button>
+        <ion-button [routerLink]="['/home/feed']">
           <ion-icon color="secondary" name="logo-linkedin"></ion-icon>
-          <ion-searchbar
-            color="tertiary"
-            class="ion-hide-lg-down"
-            placeholder="Search"
-          ></ion-searchbar>
         </ion-button>
       </ion-buttons>
+
+      <ion-searchbar
+        placeholder="Search friends..."
+        color="tertiary"
+        debounce="1000"
+        style="width: 250px"
+        (ionInput)="searchFriends($event)"
+      ></ion-searchbar>
       <ion-grid>
         <ion-row class="ion-justify-content-end">
-          <ion-col size="auto" class="ion-hide-md-down">
+          <ion-col
+            size="auto"
+            class="ion-hide-md-down"
+            style="cursor: pointer"
+            [routerLink]="['/home/feed']"
+          >
             <ion-icon name="home"></ion-icon>
             <div>Home</div>
           </ion-col>
-          <ion-col size="auto" class="ion-hide-md-down">
+          <ion-col
+            size="auto"
+            class="ion-hide-md-down"
+            style="cursor: pointer"
+            [routerLink]="['/home/networks']"
+          >
             <ion-icon name="people"></ion-icon>
             <div>My network</div>
           </ion-col>
-          <ion-col size="auto" class="ion-hide-md-down">
+          <ion-col
+            size="auto"
+            class="ion-hide-md-down"
+            style="cursor: pointer"
+            [routerLink]="['/home/chat']"
+          >
             <ion-icon name="chatbox-ellipses"></ion-icon>
             <div>Messaging</div>
           </ion-col>
-          <ion-col size="auto" class="ion-hide-md-down">
+          <ion-col
+            size="auto"
+            class="ion-hide-md-down"
+            [routerLink]="['/home/notifications']"
+            style="cursor: pointer"
+          >
             <ion-icon name="notifications"> </ion-icon>
             <ion-badge
               color="danger"
@@ -37,7 +60,7 @@
                 width: 16px;
                 border-radius: 50%;
               "
-              >2</ion-badge
+              >{{ numberOfNotifications }}</ion-badge
             >
             <div>Notifications</div>
           </ion-col>
@@ -50,9 +73,9 @@
             <ion-avatar>
               <ion-img
                 [src]="
-                imageUrl ||
-                'https://ionicframework.com/docs/img/demos/avatar.svg'
-              "
+                  imageUrl ||
+                  'https://ionicframework.com/docs/img/demos/avatar.svg'
+                "
               ></ion-img>
             </ion-avatar>
             <div
@@ -76,7 +99,6 @@
   <ion-toolbar *ngIf="(authService.isUserLoggedIn | async) === false">
     <div class="toolbar-box-isNotLoggedIn">
       <div class="title-container">
-        
         <ion-buttons slot="start" class="ion-no-padding">
           <ion-button style="cursor: pointer" [routerLink]="['/']">
             <ion-text color="primary" class="linkedin-text">Linked</ion-text>
@@ -89,14 +111,31 @@
         </ion-buttons>
       </div>
 
-      <ion-list>
+      <ion-list class="auth-buttonList">
         <ion-item>
           <ion-buttons>
-            <ion-button class="auth-button" slot="start" [routerLink]="['/auth/join']"  >Join now</ion-button>
-            <ion-button class="auth-button" slot="end" [routerLink]="['/auth/login']" >Sign In</ion-button>
+            <ion-button
+              class="auth-button"
+              slot="start"
+              [routerLink]="['/auth/join']"
+              >Join now</ion-button
+            >
+            <ion-button
+              class="auth-button"
+              slot="end"
+              [routerLink]="['/auth/login']"
+              >Sign In</ion-button
+            >
           </ion-buttons>
         </ion-item>
       </ion-list>
     </div>
   </ion-toolbar>
+  <div>
+    <ion-popover #popover [isOpen]="isOpen" (didDismiss)="isOpen = false">
+      <ng-template>
+        <app-friends-list [searchQuery]="searchQuery"></app-friends-list>
+      </ng-template>
+    </ion-popover>
+  </div>
 </ion-header>

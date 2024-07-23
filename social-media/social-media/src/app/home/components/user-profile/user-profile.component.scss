@@ -5,12 +5,3 @@
   flex-direction: column;
 }
 
-.content-container {
-  display: flex;
-  width: 1128px;
-  margin: 90px auto 0;
-  @media (max-width: 1200px) {
-    width: auto;
-    justify-content: center;
-  }
-}

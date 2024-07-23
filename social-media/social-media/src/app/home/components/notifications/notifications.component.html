@@ -1,0 +1,15 @@
+<div class="content-container notification-box">
+  <app-profile class="ion-hide-xl-down"></app-profile>
+  <ion-list *ngIf="friendList.length > 0" >
+    <ion-item *ngFor="let friend of friendList">
+      <ion-label>{{ friend.creator.firstName }}  {{ friend.creator.lastName }}</ion-label>
+      <ion-button color="primary" (click)="acceptRequest(friend.id)">Accept</ion-button>
+       <ion-icon name="checkmark-circle" *ngIf="friend.status === 'accepted'" color="success"></ion-icon>
+      <ion-button color="danger" (click)="declineRequest(friend.id)">Decline</ion-button>
+    </ion-item>
+  </ion-list>
+  <div *ngIf="friendList.length === 0">
+    You don't have any pending friend requests.
+  </div>
+<app-advertising class="ion-hide-xl-down"></app-advertising>
+</div>

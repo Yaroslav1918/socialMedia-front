@@ -15,6 +15,10 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { AllPostsComponent } from './components/all-posts/all-posts.component';
+import { ChatComponent } from './components/chat/chat.component';
+import { FriendsListComponent } from './components/friends-list/friends-list.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
+import { MyNetworkComponent } from "./components/my-network/my-network.component";
 
 
 
@@ -31,7 +35,11 @@ import { AllPostsComponent } from './components/all-posts/all-posts.component';
     WelcomeComponent,
     FooterComponent,
     UserProfileComponent,
-    AllPostsComponent
+    AllPostsComponent,
+    ChatComponent,
+    FriendsListComponent,
+    NotificationsComponent,
+    MyNetworkComponent
   ],
 })
 export class HomePageModule {}

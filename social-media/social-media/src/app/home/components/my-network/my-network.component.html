@@ -1,0 +1,48 @@
+<ion-content>
+  <div class="content-container network-box">
+    <ion-grid >
+      <ion-row>
+        <ion-col size="6">
+          <ion-list>
+            <ion-item *ngFor="let friend of friendList">
+              <ion-avatar slot="start">
+                <img [src]="friend.imagePath" alt="Profile Picture" />
+              </ion-avatar>
+              <ion-label
+                >{{ friend.firstName }} {{ friend.lastName }}</ion-label
+              >
+              <ion-button color="primary" (click)="joinConversation(friend.id)"
+                >Message</ion-button
+              >
+              <ion-icon
+                name="ellipsis-horizontal"
+                slot="end"
+                (click)="presentPopover($event, friend)"
+              ></ion-icon>
+              <ion-popover
+                [isOpen]="isPopoverOpen"
+                [event]="popoverEvent"
+                (ionPopoverDidDismiss)="closePopover()"
+                cssClass="network-popover"
+              >
+                <ng-template>
+                  <ion-list>
+                    <ion-item button (click)="removeConnection(friend.id)"
+                      >Remove Connection</ion-item
+                    >
+                  </ion-list>
+                </ng-template>
+              </ion-popover>
+            </ion-item>
+            <ion-item *ngIf="friendList.length === 0">
+              <ion-label>No friends in your network</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+        <ion-col size="6" class="ion-align-self-end" >
+            <app-advertising class="ion-hide-xl-down"></app-advertising>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

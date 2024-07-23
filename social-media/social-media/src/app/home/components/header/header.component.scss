@@ -46,7 +46,7 @@ ion-list {
 .auth-button {
   background-color: none;
   border: none;
-  border-radius: 24px; /* Rounded corners */
+  border-radius: 24px; 
   padding: 8px;
   &:nth-child(2) {
     border: 1px solid #0a66c2;
@@ -54,4 +54,9 @@ ion-list {
   &:hover {
     background-color: #cae2fa;
   }
+}
+
+.auth-buttonList ion-item {
+  --border-width: 0;
+  --border-color: transparent; 
 }

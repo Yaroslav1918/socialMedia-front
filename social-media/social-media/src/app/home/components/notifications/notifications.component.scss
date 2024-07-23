@@ -1,0 +1,19 @@
+.notification-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; 
+
+}
+
+ion-list {
+ padding: 20px;
+}
+
+
+ion-button {
+  margin-left: 10px; /* Space between buttons */
+}
+
+ion-label {
+  flex-grow: 1;
+}

@@ -27,7 +27,7 @@ export class AuthPage implements OnInit {
     const { email, password, firstName, lastName } = this.form.value;
     if (this.submissionType === "login") {
       this.authService.signIn(email, password).subscribe(() => {
-        this.router.navigateByUrl("/feed");
+       this.router.navigateByUrl('/home/feed');
       });
     } else if (this.submissionType === "join") {
       const newUser = { firstName, lastName, email, password };

@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { NgForm } from "@angular/forms";
+import { AuthService } from "../../../auth/services/auth.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-welcome",
@@ -7,14 +9,18 @@ import { NgForm } from '@angular/forms';
   styleUrls: ["./welcome.component.scss"],
 })
 export class WelcomeComponent implements OnInit {
-  @ViewChild("form") form!: NgForm
-  constructor() {}
+  @ViewChild("form") form!: NgForm;
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {}
 
   onSubmit() {
+    const { email, password} = this.form.value;
     if (this.form) {
-      console.log(this.form.value);
+      this.authService.signIn(email, password).subscribe(() => {
+        this.router.navigateByUrl("/home/feed");
+      });
+      this.form.reset();
     }
   }
 }

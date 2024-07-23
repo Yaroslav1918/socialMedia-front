@@ -1,18 +1,26 @@
 import { AuthService } from "./../../../auth/services/auth.service";
-import { Component, Input, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core";
 import { Post } from "../../models/post";
 import { PostService } from "../../services/post.service";
 import { InfiniteScrollCustomEvent, ModalController } from "@ionic/angular";
-import { BehaviorSubject, Subscription, take } from "rxjs";
+import { BehaviorSubject, Subscription, take, takeUntil } from "rxjs";
 import { ModalComponent } from "../post/modal/modal.component";
 import { User } from "../../../auth/models/user.model";
+import { Unsub } from "../../../core/unsub.class";
 
 @Component({
   selector: "app-all-posts",
   templateUrl: "./all-posts.component.html",
   styleUrls: ["./all-posts.component.scss"],
 })
-export class AllPostsComponent implements OnInit {
+export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
   @Input() postBody?: string;
   posts: Post[] = [];
   user: User | null = null;
@@ -26,31 +34,36 @@ export class AllPostsComponent implements OnInit {
     private postService: PostService,
     private authService: AuthService,
     public modalController: ModalController
-  ) {}
+  ) {super()}
 
   ngOnInit() {
     this.getPosts(false);
-    this.authService.userId.pipe(take(1)).subscribe((userId: number | null) => {
+    this.authService.userId.pipe(takeUntil(this.unsubscribe$)).subscribe((userId: number | null) => {
       this.userId$.next(userId);
     });
-    this.authService
-      .getImageUrl()
-      .subscribe((imageUrl: string | null) => {
-        this.imageUrl = imageUrl;
-      });
+    this.authService.isTokenInStorage().pipe(takeUntil(this.unsubscribe$)).subscribe((isLoggedIn) => {
+      if (isLoggedIn) {
+        this.authService.getUserImage().pipe(takeUntil(this.unsubscribe$)).subscribe((imageUrl: string | null) => {
+          this.imageUrl = imageUrl;
+        });
+      }
+    });
   }
   ngOnChanges(changes: SimpleChanges) {
     const postBody = changes["postBody"].currentValue;
     if (!postBody) return;
-    this.postService.createPost(postBody).subscribe((post: Post) => {
-      this.posts.unshift(post);
-    });
+    this.postService
+      .createPost(postBody)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((post: Post) => {
+        this.posts.unshift(post);
+      });
   }
 
   getPosts(isInitialLoad: Boolean, event?: InfiniteScrollCustomEvent) {
     this.queryParams = `?take=${this.numberOfPosts}&skip=${this.skipPosts}`;
     this.postService
-      .getAllPosts(this.queryParams)
+      .getAllPosts(this.queryParams).pipe(takeUntil(this.unsubscribe$))
       .subscribe((posts: Post[]) => {
         if (posts.length === 0 || posts.length < this.numberOfPosts) {
           if (event) event.target.disabled = true;
@@ -77,7 +90,7 @@ export class AllPostsComponent implements OnInit {
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (!data) return;
-    this.postService.updatePost(data.post.body, postId).subscribe(() => {
+    this.postService.updatePost(data.post.body, postId).pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
       const index = this.posts.findIndex((post) => post.id === postId);
       if (index !== -1) {
         this.posts[index].body = data.post.body;
@@ -85,9 +98,8 @@ export class AllPostsComponent implements OnInit {
     });
   }
   deletePost(postId: number) {
-    this.postService.deletePost(postId).subscribe(() => {
+    this.postService.deletePost(postId).pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
       this.posts = this.posts.filter((post: Post) => post.id !== postId);
     });
   }
-
 }

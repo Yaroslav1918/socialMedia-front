@@ -16,7 +16,7 @@
     <ion-card>
       <ng-container *ngIf="submissionType === 'join'">
         <ion-input
-          label="FirstName"
+          label="First Name"
           label-placement="floating"
           fill="outline"
           placeholder="Enter firstName"
@@ -27,11 +27,11 @@
           required
         ></ion-input>
 
-        <ion-text color="danger" *ngIf="!emailInput.valid && emailInput.touched"
+        <ion-text color="danger" *ngIf="!emailInput.valid && emailInput.touched && submissionType === 'join'"
           >Please enter your first name.</ion-text
         >
         <ion-input
-          label="LastName"
+          label="Last Name"
           label-placement="floating"
           fill="outline"
           placeholder="Enter email"
@@ -42,7 +42,7 @@
           required
         ></ion-input>
       </ng-container>
-      <ion-text color="danger" *ngIf="!emailInput.valid && emailInput.touched"
+      <ion-text color="danger" *ngIf="!emailInput.valid && emailInput.touched && submissionType === 'join'"
         >Please enter your last Name.</ion-text
       >
       <ion-input

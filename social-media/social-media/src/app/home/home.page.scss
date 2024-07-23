@@ -28,7 +28,6 @@ ion-modal {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 24px;
 
   .linkedin-logo {
     font-size: 37px;
@@ -42,4 +41,27 @@ ion-modal {
   &::first-letter {
     text-transform: uppercase;
   }
+}
+.content-container {
+  display: flex;
+  width: 1128px;
+  justify-content: center;
+  margin: 90px auto 0;
+  @media (max-width: 1200px) {
+    width: auto;
+  }
+}
+.popover {
+  margin-top: 70px;
+  width: 300px;
+  background: #f8f8f8;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.popover-header .popover-content {
+  width: 300px;
+  margin-top: 16px;
+  --box-shadow: none;
+  --background: none;
 }

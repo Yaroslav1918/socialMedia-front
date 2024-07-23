@@ -1,0 +1,38 @@
+p {
+  margin: 0 auto;
+  color: #000;
+  font-size: 22px;
+  z-index: 1000;
+}
+
+.chat-container {
+  display: flex;
+  height: calc(100% - 110px);
+  width: 1128px;
+  box-shadow: none;
+  border: 1px solid var(--ion-color-border-color);;
+  margin: auto;
+  margin-top: 110px;
+.selected-conversation {
+  border-left: 4px solid green;
+}
+  @media (max-width: 1128px) {
+    width: 100%;
+  }
+}
+
+ion-item {
+  border: 1px solid  var(--ion-color-border-color); 
+}
+
+.chat-avatar {
+  width: 110px;
+  height: 110px;
+  padding: 20px;
+}
+ion-card-header {
+  padding-left: 20px;
+}
+ion-input {
+  text-indent: 10px;
+}
