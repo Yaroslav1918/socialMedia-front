@@ -8,8 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptorService } from './auth/services/auth-interceptor.service';
-import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
-const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,7 +18,6 @@ const config: SocketIoConfig = { url: "http://localhost:3000", options: {} };
     AppRoutingModule,
     HttpClientModule,
     IonicStorageModule.forRoot(),
-    SocketIoModule.forRoot(config),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

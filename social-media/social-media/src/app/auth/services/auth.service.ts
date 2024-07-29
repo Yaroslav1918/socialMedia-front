@@ -60,7 +60,6 @@ export class AuthService {
     );
   }
 
-  
   signUp(newUser: NewUser): Observable<User> {
     return this.http
       .post<User>(`${environment.baseApiUrl}/auth/register`, newUser)
@@ -144,17 +143,17 @@ export class AuthService {
       );
   }
 
-  getUserImage() {
-    return this.http
-      .get(`${environment.baseApiUrl}/users/image`, {
-        responseType: "blob",
-      })
-      .pipe(
-        map((data) => {
-          return URL.createObjectURL(data);
-        }),
-        take(1)
-      );
+  getUserImage(userId?: number) {
+    let url = `${environment.baseApiUrl}/users/image`;
+    if (userId) {
+      url += `?userId=${userId}`;
+    }
+    return this.http.get(url, { responseType: "blob" }).pipe(
+      map((data) => {
+        return URL.createObjectURL(data);
+      }),
+      take(1)
+    );
   }
 
   setImageUrl(imageUrl: string) {

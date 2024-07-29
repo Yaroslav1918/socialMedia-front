@@ -5,23 +5,49 @@ import { Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { User } from "../models/user.model";
 import { FriendRequest_Status } from "../models/status.model";
+import { Message } from "../models/message.model";
+import { Conversation } from "../models/conversation.model";
+import { ChatSocketService } from "../../core/chat-socket.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ChatService {
-  constructor(private socket: Socket, private http: HttpClient) {}
+  constructor(private socket: ChatSocketService, private http: HttpClient) {}
 
-  joinConversation(conversationId: number): void {
-    this.socket.emit("joinConversation", { conversationId });
+  getFriends(): Observable<User[]> {
+    return this.http.get<User[]>(`${environment.baseApiUrl}/user/friends/my`);
   }
 
-  sendMessage(userId: number, conversationId: number, message: string): void {
-    this.socket.emit("sendMessage", { userId, conversationId, message });
+  joinConversation(friendId: number): void {
+    this.socket.emit("joinConversation", friendId);
+  }
+  leaveConversation(): void {
+    this.socket.emit("leaveConversation");
   }
 
-  getNewMessage(): Observable<string> {
-    return this.socket.fromEvent<string>("newMessage");
+  getConversationMessages(): Observable<Message[]> {
+    return this.socket.fromEvent<Message[]>("messages");
+  }
+
+  getConversations(): Observable<Conversation[]> {
+    return this.socket.fromEvent<Conversation[]>("conversations");
+  }
+
+  sendMessage(message: string, conversation: Conversation): void {
+    const newMessage: Message = {
+      message,
+      conversation,
+    };
+    this.socket.emit("sendMessage", newMessage);
+  }
+
+  getNewMessage(): Observable<Message> {
+    return this.socket.fromEvent<Message>("newMessage");
+  }
+  createConversation(friend: User): void {
+    console.log("🚀 ~ ChatService ~ createConversation ~ friend:", friend);
+    this.socket.emit("createConversation", friend);
   }
 
   getAllFriends() {

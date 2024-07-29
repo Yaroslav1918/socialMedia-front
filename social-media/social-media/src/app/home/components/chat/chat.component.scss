@@ -25,14 +25,23 @@ ion-item {
   border: 1px solid  var(--ion-color-border-color); 
 }
 
-.chat-avatar {
-  width: 110px;
-  height: 110px;
-  padding: 20px;
-}
 ion-card-header {
-  padding-left: 20px;
+  padding: 2px;
+  margin-left: 30px;
 }
+
+.chat-avatar {
+  width: 100px;
+  height: 100px;
+  padding: 10px;
+}
+
+.chat-avatar-with-margin {
+  margin-left: 30px;
+}
+
+
 ion-input {
   text-indent: 10px;
 }
+

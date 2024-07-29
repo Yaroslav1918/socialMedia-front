@@ -34,20 +34,30 @@ export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
     private postService: PostService,
     private authService: AuthService,
     public modalController: ModalController
-  ) {super()}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.getPosts(false);
-    this.authService.userId.pipe(takeUntil(this.unsubscribe$)).subscribe((userId: number | null) => {
-      this.userId$.next(userId);
-    });
-    this.authService.isTokenInStorage().pipe(takeUntil(this.unsubscribe$)).subscribe((isLoggedIn) => {
-      if (isLoggedIn) {
-        this.authService.getUserImage().pipe(takeUntil(this.unsubscribe$)).subscribe((imageUrl: string | null) => {
-          this.imageUrl = imageUrl;
-        });
-      }
-    });
+    this.authService.userId
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((userId: number | null) => {
+        this.userId$.next(userId);
+      });
+    this.authService
+      .isTokenInStorage()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((isLoggedIn) => {
+        if (isLoggedIn) {
+          this.authService
+            .getUserImage()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((imageUrl: string | null) => {
+              this.imageUrl = imageUrl;
+            });
+        }
+      });
   }
   ngOnChanges(changes: SimpleChanges) {
     const postBody = changes["postBody"].currentValue;
@@ -63,7 +73,8 @@ export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
   getPosts(isInitialLoad: Boolean, event?: InfiniteScrollCustomEvent) {
     this.queryParams = `?take=${this.numberOfPosts}&skip=${this.skipPosts}`;
     this.postService
-      .getAllPosts(this.queryParams).pipe(takeUntil(this.unsubscribe$))
+      .getAllPosts(this.queryParams)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((posts: Post[]) => {
         if (posts.length === 0 || posts.length < this.numberOfPosts) {
           if (event) event.target.disabled = true;
@@ -90,16 +101,22 @@ export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (!data) return;
-    this.postService.updatePost(data.post.body, postId).pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
-      const index = this.posts.findIndex((post) => post.id === postId);
-      if (index !== -1) {
-        this.posts[index].body = data.post.body;
-      }
-    });
+    this.postService
+      .updatePost(data.post.body, postId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(() => {
+        const index = this.posts.findIndex((post) => post.id === postId);
+        if (index !== -1) {
+          this.posts[index].body = data.post.body;
+        }
+      });
   }
   deletePost(postId: number) {
-    this.postService.deletePost(postId).pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
-      this.posts = this.posts.filter((post: Post) => post.id !== postId);
-    });
+    this.postService
+      .deletePost(postId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(() => {
+        this.posts = this.posts.filter((post: Post) => post.id !== postId);
+      });
   }
 }
