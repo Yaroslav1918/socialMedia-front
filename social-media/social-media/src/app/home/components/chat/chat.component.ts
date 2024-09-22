@@ -1,40 +1,42 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ChatService } from "../../../auth/services/chat.service";
-import { BehaviorSubject, Subscription, takeUntil } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
+import { BehaviorSubject, takeUntil } from "rxjs";
+
+import { ChatService } from "../../services/chat.service";
 import { User } from "../../../auth/models/user.model";
 import { AuthService } from "../../../auth/services/auth.service";
-import { ActivatedRoute } from "@angular/router";
 import { Unsub } from "../../../core/unsub.class";
-import { Message } from "../../../auth/models/message.model";
-import { Conversation } from "../../../auth/models/conversation.model";
 import { environment } from "../../../../environments/environment.prod";
+import { FriendService } from "../../services/friend.service";
+import { Message } from "../../models/message.model";
+import { UnreadMessages } from "../../models/unreadMessages.model";
+import { Conversation } from "../../models/conversation.model";
 
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.component.html",
   styleUrls: ["./chat.component.scss"],
 })
-export class ChatComponent extends Unsub implements OnInit {
+export class ChatComponent extends Unsub implements OnInit, OnDestroy {
   friendList: User[] = [];
   friend: User;
   friend$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(
     null
   );
-  selectedFriend: any;
-
+  selectedFriend?: User;
   messages: Message[] = [];
   newMessage: string;
-
-  selectedConversationIndex!: number;
-  userId!: number;
-  imageUrl!: string | null;
-  friendImage!: string;
-
+  selectedConversationIndex: number;
+  userId: number = 0;
+  userImageUrl: string | null = null;
+  unreadMessages: UnreadMessages[] = [];
+  friendImage: string = "";
   conversations: Conversation[] = [];
   conversation: Conversation = {};
 
   constructor(
     private chatService: ChatService,
+    private friendService: FriendService,
     private authService: AuthService,
     private route: ActivatedRoute
   ) {
@@ -46,13 +48,25 @@ export class ChatComponent extends Unsub implements OnInit {
     this.selectedConversationIndex = i;
     this.messages = [];
     this.chatService.joinConversation(this.selectedFriend.id);
+    this.setConversationForFriend();
+    this.fetchMessagesForFriend();
+    this.loadFriendImage(friend.id);
   }
 
   sendMessage() {
-    if (this.newMessage && this.selectedFriend) {
-      console.log("dsfsd");
-      let conversationUserIds = [this.userId, this.friend.id].sort();
+    if (this.newMessage && this.selectedFriend && this.conversation) {
+      this.chatService.sendMessage(
+        this.newMessage,
+        this.conversation,
+        this.selectedFriend
+      );
+      this.newMessage = "";
+    }
+  }
 
+  private setConversationForFriend() {
+    if (this.selectedFriend && this.userId) {
+      let conversationUserIds = [this.userId, this.selectedFriend.id].sort();
       this.conversations.forEach((conversation: Conversation) => {
         let userIds = (conversation.users ?? [])
           .map((user: User) => user.id)
@@ -62,9 +76,6 @@ export class ChatComponent extends Unsub implements OnInit {
           this.conversation = conversation;
         }
       });
-
-      this.chatService.sendMessage(this.newMessage, this.conversation);
-      this.newMessage = "";
     }
   }
 
@@ -72,8 +83,15 @@ export class ChatComponent extends Unsub implements OnInit {
     this.authService
       .getUserImage()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((imageUrl: string | null) => {
-        this.imageUrl = imageUrl;
+      .subscribe((userImageUrl: string | null) => {
+        this.userImageUrl = userImageUrl;
+      });
+
+    this.chatService
+      .getUnreadMessages()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((unreadMessages: UnreadMessages[]) => {
+        this.unreadMessages = unreadMessages;
       });
 
     this.chatService
@@ -82,6 +100,7 @@ export class ChatComponent extends Unsub implements OnInit {
       .subscribe((conversations: Conversation[]) => {
         this.conversations.push(conversations[0]);
       });
+
     this.authService.userId
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((id) => {
@@ -89,18 +108,18 @@ export class ChatComponent extends Unsub implements OnInit {
           this.userId = id;
         }
       });
+
     this.chatService
       .getNewMessage()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((message: Message) => {
-        message.createdAt = new Date();
+        message.createdDate = new Date();
         const allMessageIds = this.messages.map(
           (message: Message) => message.id
         );
         if (!allMessageIds.includes(message.id)) {
           this.messages.push(message);
         }
-        console.log(this.messages);
       });
 
     this.friend$.pipe(takeUntil(this.unsubscribe$)).subscribe((friend: any) => {
@@ -109,7 +128,7 @@ export class ChatComponent extends Unsub implements OnInit {
       }
     });
 
-    this.chatService
+    this.friendService
       .getAllFriends()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((friends: User[]) => {
@@ -118,9 +137,6 @@ export class ChatComponent extends Unsub implements OnInit {
         if (friends.length > 0) {
           this.friend = this.friendList[0];
           this.friend$.next(this.friend);
-          this.friendList.forEach((friend: User) => {
-            this.loadFriendImage(friend.id);
-          });
           friends.forEach((friend: User) => {
             this.chatService.createConversation(friend);
           });
@@ -145,23 +161,52 @@ export class ChatComponent extends Unsub implements OnInit {
       }
     }
   }
+  private fetchMessagesForFriend() {
+    const conversationId = this.conversation.id!;
+    this.chatService
+      .fetchMessages(conversationId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((messages: Message[]) => {
+        this.messages = messages;
+        this.markMessagesAsRead();
+      });
+  }
 
   loadFriendImage(userId: number) {
     this.authService
       .getUserImage(userId)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((imageUrl: string) => {
-        this.friendImage = imageUrl;
+      .subscribe((userImageUrl: string) => {
+        this.friendImage = userImageUrl;
       });
   }
 
-  defineFullImagePath(user: User | undefined): string {
+  getUnreadMessageCountFromFriend(friend: User): number {
+    return this.unreadMessages.filter(
+      (message: UnreadMessages) =>
+        !message.read &&
+        message.conversation?.users?.some((user) => user.id === friend.id)
+    ).length;
+  }
+
+  defineFullImagePath(user: User | undefined): string | null {
     if (!user) {
       return environment.defaultAvatar;
     }
-    if (user.id === this.userId && this.imageUrl) {
-      return this.imageUrl;
+
+    if (user.id === this.userId && this.userImageUrl) {
+      return this.friendImage;
     }
-    return user.imagePath ? this.friendImage : environment.defaultAvatar;
+
+    return user.imagePath ? this.userImageUrl : environment.defaultAvatar;
+  }
+
+  removeMessageFromList(messageId: number) {
+    this.chatService.onDeleteMessage(messageId);
+    this.messages = this.messages.filter((message) => message.id !== messageId);
+  }
+
+  markMessagesAsRead(): void {
+    this.chatService.markMessagesAsRead(this.conversation.id!);
   }
 }

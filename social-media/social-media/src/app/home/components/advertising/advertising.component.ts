@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./advertising.component.scss'],
 })
 export class AdvertisingComponent  implements OnInit {
-
   constructor() { }
 
   ngOnInit() {}

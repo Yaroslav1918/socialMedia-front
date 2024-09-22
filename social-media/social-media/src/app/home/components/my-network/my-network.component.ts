@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { User } from "../../../auth/models/user.model";
-import { Subscription, takeUntil } from "rxjs";
-import { ChatService } from "../../../auth/services/chat.service";
+import { Component, OnInit } from "@angular/core";
+import { takeUntil } from "rxjs";
 import { Router } from "@angular/router";
+
+import { User } from "../../../auth/models/user.model";
 import { Unsub } from "../../../core/unsub.class";
+import { FriendService } from "../../services/friend.service";
 
 @Component({
   selector: "app-my-network",
@@ -14,12 +15,12 @@ export class MyNetworkComponent extends Unsub implements OnInit {
   friendList: User[] = [];
   popoverEvent: any;
   isPopoverOpen: boolean = false;
-  constructor(private chatService: ChatService, private router: Router) {
+  constructor(private friendService: FriendService, private router: Router) {
     super();
   }
 
   ngOnInit() {
-    this.chatService
+    this.friendService
       .getAllFriends()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((friendsList: User[]) => {
@@ -28,7 +29,7 @@ export class MyNetworkComponent extends Unsub implements OnInit {
   }
 
   joinConversation(friendId: number) {
-    this.router.navigate(["/home/chat", { friendId }]);
+     this.router.navigate([`/home/chat/${friendId}`]);
   }
 
   presentPopover(event: any, friend: any) {
@@ -41,7 +42,7 @@ export class MyNetworkComponent extends Unsub implements OnInit {
   }
 
   removeConnection(friendId: number) {
-    this.chatService
+    this.friendService
       .deleteFriend(friendId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {

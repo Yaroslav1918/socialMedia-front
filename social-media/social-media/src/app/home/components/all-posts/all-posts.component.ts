@@ -1,19 +1,20 @@
-import { AuthService } from "./../../../auth/services/auth.service";
 import {
   Component,
   Input,
   OnChanges,
-  OnDestroy,
   OnInit,
   SimpleChanges,
 } from "@angular/core";
-import { Post } from "../../models/post";
-import { PostService } from "../../services/post.service";
 import { InfiniteScrollCustomEvent, ModalController } from "@ionic/angular";
-import { BehaviorSubject, Subscription, take, takeUntil } from "rxjs";
+import { BehaviorSubject, catchError, of, takeUntil } from "rxjs";
+
+import { AuthService } from "./../../../auth/services/auth.service";
+import { PostService } from "../../services/post.service";
 import { ModalComponent } from "../post/modal/modal.component";
 import { User } from "../../../auth/models/user.model";
 import { Unsub } from "../../../core/unsub.class";
+import { Post } from "../../models/post.model";
+import { ToastService } from "../../../core/toast.service";
 
 @Component({
   selector: "app-all-posts",
@@ -22,6 +23,7 @@ import { Unsub } from "../../../core/unsub.class";
 })
 export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
   @Input() postBody?: string;
+  @Input() userId!: number;
   posts: Post[] = [];
   user: User | null = null;
   queryParams!: string;
@@ -33,18 +35,21 @@ export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
   constructor(
     private postService: PostService,
     private authService: AuthService,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private toastService: ToastService
   ) {
     super();
   }
 
   ngOnInit() {
     this.getPosts(false);
+
     this.authService.userId
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((userId: number | null) => {
         this.userId$.next(userId);
       });
+
     this.authService
       .isTokenInStorage()
       .pipe(takeUntil(this.unsubscribe$))
@@ -59,15 +64,33 @@ export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
         }
       });
   }
+
   ngOnChanges(changes: SimpleChanges) {
-    const postBody = changes["postBody"].currentValue;
-    if (!postBody) return;
-    this.postService
-      .createPost(postBody)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((post: Post) => {
-        this.posts.unshift(post);
-      });
+    if (changes["userId"]) {
+      const userChange = changes["userId"];
+      this.queryParams = `?take=${this.numberOfPosts}&skip=${this.skipPosts}`;
+      if (userChange.currentValue) {
+        this.postService
+          .getAllPosts(this.queryParams)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((posts: Post[]) => {
+            for (let post = 0; post < posts.length; post++) {
+              this.posts.push(posts[post]);
+            }
+            this.skipPosts += this.numberOfPosts;
+          });
+      }
+    }
+    if (!this.userId) {
+      const postBody = changes["postBody"].currentValue;
+      if (!postBody) return;
+      this.postService
+        .createPost(postBody)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((post: Post) => {
+          this.posts.unshift(post);
+        });
+    }
   }
 
   getPosts(isInitialLoad: Boolean, event?: InfiniteScrollCustomEvent) {
@@ -111,10 +134,17 @@ export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
         }
       });
   }
+
   deletePost(postId: number) {
     this.postService
       .deletePost(postId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        catchError(({ error }) => {
+          this.toastService.presentToast(error.message);
+          return of({ error: true });
+        })
+      )
       .subscribe(() => {
         this.posts = this.posts.filter((post: Post) => post.id !== postId);
       });

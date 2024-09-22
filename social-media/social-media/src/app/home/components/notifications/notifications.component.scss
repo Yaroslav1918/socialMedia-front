@@ -1,19 +1,22 @@
 .notification-box {
   display: flex;
-  justify-content: space-between;
-  align-items: stretch; 
-
 }
-
-ion-list {
- padding: 20px;
-}
-
 
 ion-button {
-  margin-left: 10px; /* Space between buttons */
+  margin-left: 10px;
 }
 
 ion-label {
   flex-grow: 1;
+}
+
+.content-container {
+  div {
+    margin-top: 20px;
+  }
+}
+
+.friend-list {
+  margin-top: 20px;
+  --ion-item-background: var(--ion-color-back-color);
 }

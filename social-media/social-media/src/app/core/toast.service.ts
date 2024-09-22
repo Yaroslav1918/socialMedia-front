@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { ToastController } from "@ionic/angular";
-import { Observable, of, tap, throwError } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -24,5 +23,4 @@ export class ToastService {
     });
     await toast.present();
   }
-
 }

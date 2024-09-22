@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { CanActivate, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 import { Observable, of } from "rxjs";
 import { tap, switchMap, take } from "rxjs/operators";
@@ -14,8 +14,7 @@ export class GuestGuard {
     return this.authService.isUserLoggedIn.pipe(
       take(1),
       switchMap((isLoggedIn) => {
-          if (isLoggedIn) {
-            console.log("sDzfgasdfsdgse")
+        if (isLoggedIn) {
           this.router.navigate(["/home/feed"]);
           return of(false);
         }

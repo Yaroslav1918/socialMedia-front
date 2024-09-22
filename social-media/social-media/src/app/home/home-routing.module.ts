@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+
 import { HomePage } from "./home.page";
 import { UserProfileComponent } from "./components/user-profile/user-profile.component";
 import { WelcomeComponent } from "./components/welcome/welcome.component";
@@ -8,6 +9,7 @@ import { ChatComponent } from "./components/chat/chat.component";
 import { NotificationsComponent } from "./components/notifications/notifications.component";
 import { MyNetworkComponent } from "./components/my-network/my-network.component";
 import { GuestGuard } from "../auth/guards/guest.guard";
+import { FriendProfileComponent } from "./components/friend-profile/friend-profile.component";
 
 const routes: Routes = [
   {
@@ -17,6 +19,11 @@ const routes: Routes = [
       { path: "", component: WelcomeComponent, canActivate: [GuestGuard] },
       {
         path: "chat",
+        component: ChatComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "chat/:friendId",
         component: ChatComponent,
         canActivate: [AuthGuard],
       },
@@ -33,6 +40,11 @@ const routes: Routes = [
       {
         path: "networks",
         component: MyNetworkComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "friend-profile/:id",
+        component: FriendProfileComponent,
         canActivate: [AuthGuard],
       },
     ],

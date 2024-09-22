@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   baseApiUrl: "http://localhost:3000/api",
   defaultAvatar: "https://ionicframework.com/docs/img/demos/avatar.svg",
+  webSocketEndpoint: "http://localhost:3000",
 };
 
 /*

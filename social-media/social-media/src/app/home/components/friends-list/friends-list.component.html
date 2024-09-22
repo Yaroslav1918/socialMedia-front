@@ -1,13 +1,15 @@
 <ion-list>
   <ion-item *ngFor="let friend of friends$ | async">
-    {{ friend.firstName }}     {{ friend.lastName }}
-    <ion-button (click)="connectFriend(friend.id)" slot="end" color="primary" fill="outline" class="connect-button">
-     <ng-container *ngIf="isConnected(friend.id)">
-        &#10004; 
-      </ng-container>
-      <ng-container *ngIf="!isConnected(friend.id)">
-        Connect
-      </ng-container>
+    {{ friend.firstName }} {{ friend.lastName }}
+    <ion-button
+      (click)="connectFriend(friend.id)"
+      slot="end"
+      color="primary"
+      fill="outline"
+      class="connect-button"
+    >
+      <ng-container *ngIf="isConnected(friend.id)"> &#10004; </ng-container>
+      <ng-container *ngIf="!isConnected(friend.id)"> Connect </ng-container>
     </ion-button>
   </ion-item>
   <ion-item *ngIf="(friends$ | async)?.length === 0">

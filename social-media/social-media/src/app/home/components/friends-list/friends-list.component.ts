@@ -6,11 +6,12 @@ import {
   SimpleChanges,
 } from "@angular/core";
 import { catchError, Observable, of, takeUntil } from "rxjs";
+import { PopoverController } from "@ionic/angular";
+
 import { User } from "../../../auth/models/user.model";
-import { ChatService } from "../../../auth/services/chat.service";
 import { Unsub } from "../../../core/unsub.class";
 import { ToastService } from "../../../core/toast.service";
-import { PopoverController } from "@ionic/angular";
+import { FriendService } from "../../services/friend.service";
 
 @Component({
   selector: "app-friends-list",
@@ -18,12 +19,12 @@ import { PopoverController } from "@ionic/angular";
   styleUrls: ["./friends-list.component.scss"],
 })
 export class FriendsListComponent extends Unsub implements OnInit, OnChanges {
-  @Input() searchQuery!: string;
+  @Input() searchQuery: string = "";
   connectedFriends: Set<number> = new Set<number>();
-  friends$!: Observable<User[]>;
+  friends$: Observable<User[]> = of([]);
 
   constructor(
-    private chatService: ChatService,
+    private friendService: FriendService,
     private toastService: ToastService,
     private popoverController: PopoverController
   ) {
@@ -32,12 +33,12 @@ export class FriendsListComponent extends Unsub implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["searchQuery"] && this.searchQuery) {
-      this.friends$ = this.chatService.searchFriendsByName(this.searchQuery);
+      this.friends$ = this.friendService.searchFriendsByName(this.searchQuery);
     }
   }
 
   connectFriend(friendId: number) {
-    this.chatService
+    this.friendService
       .sendFriendRequest(friendId)
       .pipe(
         takeUntil(this.unsubscribe$),
@@ -51,14 +52,14 @@ export class FriendsListComponent extends Unsub implements OnInit, OnChanges {
           this.connectedFriends.add(friendId);
         }
         setTimeout(() => {
-           this.popoverController.dismiss();
-        }, 1000); 
-      
+          this.popoverController.dismiss();
+        }, 1000);
       });
   }
 
   isConnected(friendId: number): boolean {
     return this.connectedFriends.has(friendId);
   }
+
   ngOnInit() {}
 }

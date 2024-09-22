@@ -6,17 +6,21 @@
       #fileUpload
       (change)="onFileSelect($event)"
     />
-    <ion-avatar (click)="fileUpload.click()" >
+     <ion-avatar *ngIf="!user" (click)="fileUpload.click()">
       <img
         alt="Avatar"
-        [src]="
-          imageUrl || 'https://ionicframework.com/docs/img/demos/card-media.png'
-        "
+        [src]="imageUrl || 'https://ionicframework.com/docs/img/demos/card-media.png'"
+      />
+    </ion-avatar>
+    <ion-avatar *ngIf="user">
+      <img
+        alt="Avatar"
+        [src]="imageUrl || 'https://ionicframework.com/docs/img/demos/card-media.png'"
       />
     </ion-avatar>
   </div>
   <ion-card-header>
-    <ion-card-title>{{fullName}}</ion-card-title>
+    <ion-card-title>{{ fullName }}</ion-card-title>
   </ion-card-header>
-  <ion-card-content> Your connection: {{numberOfFriends}} </ion-card-content>
+  <ion-card-content *ngIf="!user"> Your connection: {{ numberOfFriends }} </ion-card-content>
 </ion-card>

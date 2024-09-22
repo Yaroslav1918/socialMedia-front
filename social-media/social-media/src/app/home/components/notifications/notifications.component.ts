@@ -1,8 +1,12 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ChatService } from "../../../auth/services/chat.service";
-import { Subscription, takeUntil } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { takeUntil } from "rxjs";
+
 import { Unsub } from "../../../core/unsub.class";
-import { UnifiedService } from "../../../auth/services/unified.service";
+import { FriendService } from "../../services/friend.service";
+import { User } from "../../../auth/models/user.model";
+import { AuthService } from "../../../auth/services/auth.service";
+import { FriendRequest } from "../../../auth/models/friendRequest.model";
+import { Message } from "../../models/message.model";
 
 @Component({
   selector: "app-notifications",
@@ -10,27 +14,40 @@ import { UnifiedService } from "../../../auth/services/unified.service";
   styleUrls: ["./notifications.component.scss"],
 })
 export class NotificationsComponent extends Unsub implements OnInit {
-  friendList: any[] = [];
+  friendList: FriendRequest[] = [];
+  currentUserId: number = 0;
+  unreadMessages: Message[] = [];
+
   constructor(
-    private chatService: ChatService,
-    private unifiedService: UnifiedService
+    private friendService: FriendService,
+    private authService: AuthService
   ) {
     super();
   }
 
-  ngOnInit(): void {
-    this.chatService
+  ngOnInit() {
+    this.authService.userId
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((id: number | null) => {
+        if (id !== null) {
+          this.currentUserId = id;
+        }
+      });
+
+    this.friendService
       .getAllRequestsFriend()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((friendsList: any[]) => {
+      .subscribe((friendsList: FriendRequest[]) => {
         this.friendList = friendsList.filter(
-          (friend) => friend.status === "pending"
+          (friend) =>
+            friend.status === "pending" &&
+            friend.creator.id !== this.currentUserId
         );
       });
   }
 
   acceptRequest(receiverId: number) {
-    this.chatService
+    this.friendService
       .updateRequestStatus(receiverId, "accepted")
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {
@@ -38,8 +55,14 @@ export class NotificationsComponent extends Unsub implements OnInit {
       });
   }
 
+  getFilteredUsers(conversationUsers?: User[]): User[] {
+    return conversationUsers
+      ? conversationUsers.filter((user) => user.id !== this.currentUserId)
+      : [];
+  }
+
   declineRequest(receiverId: number) {
-    this.chatService
+    this.friendService
       .updateRequestStatus(receiverId, "declined")
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {
@@ -51,7 +74,5 @@ export class NotificationsComponent extends Unsub implements OnInit {
     this.friendList = this.friendList.filter(
       (friend) => friend.id !== receiverId
     );
-    this.unifiedService.updateNotificationCount(this.friendList.length);
   }
-
 }

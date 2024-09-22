@@ -1,9 +1,9 @@
 <div class="content-container">
-  <app-profile ></app-profile>
-  <div>
-    <app-post (create)="onCreatePost($event)"></app-post>
+  <app-profile [user]="friend"></app-profile>
+  <div >
+    <div class="post-container"></div >
     <div class="item-divider post-divider"></div>
-    <app-all-posts [postBody]="body"></app-all-posts>
+    <app-all-posts [userId]="friendId"></app-all-posts>
   </div>
   <app-advertising class="ion-hide-xl-down"></app-advertising>
 </div>

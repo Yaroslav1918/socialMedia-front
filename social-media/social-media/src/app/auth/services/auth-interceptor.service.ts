@@ -5,10 +5,9 @@ import {
   HttpHandler,
   HttpRequest,
 } from "@angular/common/http";
+import { Storage } from "@capacitor/storage";
+import { Observable, from,  switchMap } from "rxjs";
 
-import { Observable, from, of, switchMap } from "rxjs";
-
-/** Pass untouched request through to the next request handler. */
 @Injectable({
   providedIn: "root",
 })
@@ -17,8 +16,9 @@ export class AuthInterceptorService implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return of(localStorage.getItem("token")).pipe(
-      switchMap((token: string | null) => {
+    return from(Storage.get({ key: "token" })).pipe(
+      switchMap((tokenData) => {
+        const token = tokenData.value;
         if (token) {
           const clonedRequest = req.clone({
             headers: req.headers.set("Authorization", "Bearer " + token),

@@ -2,20 +2,26 @@ ion-card {
   width: 230px;
   box-shadow: none;
   border: 1px solid #e1e1e1;
+   @media (max-width: 1200px) {
+    width: 100%;
+  }
 }
 
 ion-avatar {
-width: 80px;
-height: 80px;
-cursor: pointer
+  display: block;
+  margin: auto;
+  width: 80px;
+  height: 80px;
+  padding: 5px;
+  cursor: pointer;
 }
+
 .backdrop {
   height: 84px;
   display: flex;
   background-color: #bcd4e4;
 }
 
-ion-card ion-avatar {
-  display: block;
-  margin: auto;
+ion-card-title {
+  text-align: center;
 }

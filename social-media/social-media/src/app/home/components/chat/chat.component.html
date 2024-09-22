@@ -17,6 +17,13 @@
               <ion-label
                 >{{ friend.firstName }} {{ friend.lastName }}</ion-label
               >
+              <ion-badge
+                *ngIf="getUnreadMessageCountFromFriend(friend) > 0"
+                color="secondary"
+                slot="end"
+              >
+                {{ getUnreadMessageCountFromFriend(friend) }}
+              </ion-badge>
             </ion-item>
             <ion-item *ngIf="friendList.length === 0">
               Your friend list is empty
@@ -25,7 +32,10 @@
         </ion-col>
         <ion-col size="8">
           <ion-card>
-            <ion-avatar *ngIf="selectedFriend?.imagePath" class="chat-avatar chat-avatar-with-margin">
+            <ion-avatar
+              *ngIf="selectedFriend?.imagePath"
+              class="chat-avatar chat-avatar-with-margin"
+            >
               <ion-img [src]="selectedFriend?.imagePath"></ion-img>
             </ion-avatar>
 
@@ -38,13 +48,27 @@
             <ion-card-content>
               <ion-list class="chat-list">
                 <ion-item *ngFor="let item of messages">
-                  <ion-avatar  class="chat-avatar">
+                  <ion-avatar class="chat-avatar">
                     <ion-img [src]="defineFullImagePath(item.user)"></ion-img>
                   </ion-avatar>
                   <ion-label>{{ item.message }}</ion-label>
+                  <ion-badge
+                    *ngIf="!item.read && item.user.id === userId"
+                    color="primary"
+                    style="margin-left: 8px"
+                  >
+                    New
+                  </ion-badge>
                   <ion-note slot="end">{{
-                    item.createdAt | date : "short"
+                    item.createdDate | date : "short"
                   }}</ion-note>
+                  <ion-button
+                    fill="clear"
+                    slot="end"
+                    (click)="removeMessageFromList(item.id!)"
+                  >
+                    <ion-icon name="trash"></ion-icon>
+                  </ion-button>
                 </ion-item>
               </ion-list>
             </ion-card-content>

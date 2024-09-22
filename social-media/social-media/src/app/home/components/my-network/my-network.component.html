@@ -1,11 +1,11 @@
 <ion-content>
   <div class="content-container network-box">
-    <ion-grid >
+    <ion-grid>
       <ion-row>
         <ion-col size="6">
           <ion-list>
-            <ion-item *ngFor="let friend of friendList">
-              <ion-avatar slot="start">
+           <ion-item *ngFor="let friend of friendList" >
+              <ion-avatar slot="start" [routerLink]="['/home/friend-profile', friend.id]">
                 <img [src]="friend.imagePath" alt="Profile Picture" />
               </ion-avatar>
               <ion-label
@@ -39,8 +39,8 @@
             </ion-item>
           </ion-list>
         </ion-col>
-        <ion-col size="6" class="ion-align-self-end" >
-            <app-advertising class="ion-hide-xl-down"></app-advertising>
+        <ion-col size="6" class="ion-align-self-end">
+          <app-advertising class="ion-hide-xl-down"></app-advertising>
         </ion-col>
       </ion-row>
     </ion-grid>

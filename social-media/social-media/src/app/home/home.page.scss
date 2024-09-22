@@ -48,6 +48,7 @@ ion-modal {
   justify-content: center;
   margin: 90px auto 0;
   @media (max-width: 1200px) {
+     flex-direction: column;
     width: auto;
   }
 }

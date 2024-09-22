@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
-import { AuthService } from "./services/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
+
+import { AuthService } from "./services/auth.service";
 
 @Component({
   selector: "app-auth",
@@ -27,7 +28,7 @@ export class AuthPage implements OnInit {
     const { email, password, firstName, lastName } = this.form.value;
     if (this.submissionType === "login") {
       this.authService.signIn(email, password).subscribe(() => {
-       this.router.navigateByUrl('/home/feed');
+        this.router.navigateByUrl("/home/feed");
       });
     } else if (this.submissionType === "join") {
       const newUser = { firstName, lastName, email, password };

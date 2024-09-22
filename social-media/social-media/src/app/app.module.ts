@@ -1,14 +1,13 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { RouteReuseStrategy } from "@angular/router";
 import { IonicStorageModule } from "@ionic/storage-angular";
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthInterceptorService } from './auth/services/auth-interceptor.service';
-
+import { AppComponent } from "./app.component";
+import { AppRoutingModule } from "./app-routing.module";
+import { AuthInterceptorService } from "./auth/services/auth-interceptor.service";
 
 @NgModule({
   declarations: [AppComponent],

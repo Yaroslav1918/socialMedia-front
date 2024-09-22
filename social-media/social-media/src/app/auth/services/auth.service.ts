@@ -1,25 +1,29 @@
-import { environment } from "./../../../environments/environment.prod";
 import { Injectable } from "@angular/core";
-import { NewUser } from "../models/newUser.model";
+import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { jwtDecode } from "jwt-decode";
-
+import { Storage } from "@capacitor/storage";
 import {
   BehaviorSubject,
   Observable,
   catchError,
+  distinctUntilChanged,
   from,
   map,
   of,
+  shareReplay,
   switchMap,
   take,
   tap,
   throwError,
 } from "rxjs";
-import { User } from "../models/user.model";
+
 import { UserResponse } from "../models/userResponse.model";
-import { Router } from "@angular/router";
 import { ToastService } from "../../core/toast.service";
+import { ChatService } from "../../home/services/chat.service";
+import { User } from "../models/user.model";
+import { environment } from "./../../../environments/environment.prod";
+import { NewUser } from "../../home/models/newUser.model";
 
 @Injectable({
   providedIn: "root",
@@ -27,10 +31,13 @@ import { ToastService } from "../../core/toast.service";
 export class AuthService {
   private user$ = new BehaviorSubject<User | null>(null);
   private imageUrl$ = new BehaviorSubject<string | null>(null);
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+
   constructor(
     private http: HttpClient,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private chatService: ChatService
   ) {
     this.isTokenInStorage().subscribe((isLoggedIn) => {
       if (isLoggedIn) {
@@ -41,17 +48,21 @@ export class AuthService {
     });
   }
 
+  public isTokenExist(): Observable<boolean> {
+    return this.isLoggedInSubject.asObservable();
+  }
+
   get isUserLoggedIn(): Observable<boolean> {
     return this.user$.asObservable().pipe(
-      switchMap((user) => {
-        return of(user !== null);
-      })
+      distinctUntilChanged(),
+      switchMap((user) => of(user !== null))
     );
   }
 
   getImageUrl(): Observable<string | null> {
     return this.imageUrl$.asObservable();
   }
+
   get userId(): Observable<number | null> {
     return this.user$.asObservable().pipe(
       switchMap((user: User | null) => {
@@ -83,10 +94,14 @@ export class AuthService {
       })
       .pipe(
         take(1),
-        tap((response: { access_token: string }) => {
-          localStorage.setItem("token", response.access_token);
+        tap(async (response: { access_token: string }) => {
+          await Storage.set({
+            key: "token",
+            value: response.access_token,
+          });
           const decodedToken: UserResponse = jwtDecode(response.access_token);
           this.user$.next(decodedToken);
+          this.isLoggedInSubject.next(true);
         }),
         catchError((error: any) => {
           this.toastService.presentToast(error.error.message);
@@ -96,8 +111,9 @@ export class AuthService {
   }
 
   isTokenInStorage(): Observable<boolean> {
-    return of(localStorage.getItem("token")).pipe(
-      switchMap((token: string | null) => {
+    return from(Storage.get({ key: "token" })).pipe(
+      switchMap((tokenData) => {
+        const token = tokenData.value;
         if (!token) return of(false);
 
         const decodedToken: UserResponse = jwtDecode(token);
@@ -105,6 +121,7 @@ export class AuthService {
         const isExpired =
           new Date() > new Date(jwtExpirationInMsSinceUnixEpoch);
         if (isExpired) return of(false);
+        this.isLoggedInSubject.next(true);
         return this.getUserImage().pipe(
           tap((imageUrl: string | null) => {
             if (imageUrl && decodedToken) {
@@ -120,9 +137,11 @@ export class AuthService {
       })
     );
   }
+
   logout(): void {
     this.user$.next(null);
-    localStorage.removeItem("token");
+    Storage.remove({ key: "token" });
+    this.chatService.disconnect();
     this.router.navigateByUrl("/auth/login");
   }
 

@@ -7,7 +7,7 @@
             <img
               alt="Silhouette of a person's head"
               [src]="
-                imageUrl ||
+                post.author.imagePath ||
                 'https://ionicframework.com/docs/img/demos/avatar.svg'
               "
             />
@@ -37,25 +37,25 @@
         <ion-item>
           <ion-button color="medium" fill="clear">
             <ion-icon name="thumbs-up-outline"></ion-icon>
-            <ion-text>Like</ion-text>
+            <ion-text class="ion-hide-md-down">Like</ion-text>
           </ion-button>
         </ion-item>
         <ion-item>
           <ion-button color="medium" fill="clear">
             <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-            <ion-text>Comment</ion-text>
+            <ion-text class="ion-hide-md-down">Comment</ion-text>
           </ion-button>
         </ion-item>
         <ion-item>
           <ion-button color="medium" fill="clear">
             <ion-icon name="arrow-redo-outline"></ion-icon>
-            <ion-text>Share</ion-text>
+            <ion-text class="ion-hide-md-down">Share</ion-text>
           </ion-button>
         </ion-item>
         <ion-item>
           <ion-button color="medium" fill="clear">
             <ion-icon name="paper-plane-outline"></ion-icon>
-            <ion-text>Send</ion-text>
+            <ion-text class="ion-hide-md-down">Send</ion-text>
           </ion-button>
         </ion-item>
       </ion-list>
