@@ -71,7 +71,7 @@ export class AuthService {
     );
   }
 
-  signUp(newUser: NewUser): Observable<User> {
+  signUp(newUser: FormData): Observable<User> {
     return this.http
       .post<User>(`${environment.baseApiUrl}/auth/register`, newUser)
       .pipe(

@@ -42,13 +42,15 @@ ion-modal {
     text-transform: uppercase;
   }
 }
+
 .content-container {
   display: flex;
   width: 1128px;
+  max-width: 100%;
   justify-content: center;
   margin: 90px auto 0;
   @media (max-width: 1200px) {
-     flex-direction: column;
+    flex-direction: column;
     width: auto;
   }
 }

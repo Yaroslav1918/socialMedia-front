@@ -15,6 +15,7 @@ export class PostComponent extends Unsub implements OnInit {
   @Output() create: EventEmitter<any> = new EventEmitter();
   imageUrl: string | null = null;
   fullName = "";
+  canEmitCreate: boolean = true;
 
   constructor(
     private modalController: ModalController,

@@ -19,7 +19,7 @@
           label="First Name"
           label-placement="floating"
           fill="outline"
-          placeholder="Enter firstName"
+          placeholder="Enter first name"
           #firstNameInput="ngModel"
           ngModel
           type="text"
@@ -27,7 +27,9 @@
           required
         ></ion-input>
 
-        <ion-text color="danger" *ngIf="!emailInput.valid && emailInput.touched && submissionType === 'join'"
+        <ion-text
+          color="danger"
+          *ngIf="!emailInput.valid && emailInput.touched && submissionType === 'join'"
           >Please enter your first name.</ion-text
         >
         <ion-input
@@ -41,10 +43,29 @@
           name="lastName"
           required
         ></ion-input>
+        <ion-input
+          label="Image"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Select image"
+          type="file"
+          name="image"
+          ngModel
+          #imageInput="ngModel"
+          (change)="onFileSelected($event)"
+          required
+        ></ion-input>
+
+        <ion-text color="danger" *ngIf="!imageInput.valid && imageInput.touched"
+          >Please upload an image.</ion-text
+        >
       </ng-container>
-      <ion-text color="danger" *ngIf="!emailInput.valid && emailInput.touched && submissionType === 'join'"
+      <ion-text
+        color="danger"
+        *ngIf="!emailInput.valid && emailInput.touched && submissionType === 'join'"
         >Please enter your last Name.</ion-text
       >
+
       <ion-input
         label="Email"
         label-placement="floating"

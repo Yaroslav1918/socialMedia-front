@@ -39,11 +39,17 @@ export class PopoverComponent extends Unsub implements OnInit {
           this.userId = id;
         }
       });
-    this.authService
-      .getImageUrl()
+    this.authService.isUserLoggedIn
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((imageUrl: string | null) => {
-        this.imageUrl = imageUrl;
+      .subscribe((isLoggedIn) => {
+        if (isLoggedIn) {
+          this.authService
+            .getUserImage()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((imageUrl: string | null) => {
+              this.imageUrl = imageUrl;
+            });
+        }
       });
 
     this.authService.userFullName
@@ -86,10 +92,28 @@ export class PopoverComponent extends Unsub implements OnInit {
       cssClass: "popover-header",
       event: ev,
       showBackdrop: false,
+      backdropDismiss: true,
     });
+
     await popover.present();
+
+    const popoverElement = await popover.querySelector("ion-content");
+    if (popoverElement) {
+      const focusableElement = popoverElement.querySelector(
+        "[tabindex], button, a, input"
+      );
+      if (focusableElement) {
+        (focusableElement as HTMLElement).focus();
+      }
+    }
   }
+
   dismissPopover() {
-    this.popoverController.dismiss();
+    this.popoverController.dismiss().then(() => {
+      const triggerButton = document.getElementById("popover-trigger");
+      if (triggerButton) {
+        triggerButton.focus();
+      }
+    });
   }
 }

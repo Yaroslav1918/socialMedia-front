@@ -2,9 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { takeUntil } from "rxjs";
 
-import { User } from "../../../auth/models/user.model";
 import { Unsub } from "../../../core/unsub.class";
 import { PostService } from "../../services/post.service";
+import { FriendService } from "../../services/friend.service";
+import { User } from "../../../auth/models/user.model";
 
 @Component({
   selector: "app-friend-profile",
@@ -12,13 +13,17 @@ import { PostService } from "../../services/post.service";
   styleUrls: ["./friend-profile.component.scss"],
 })
 export class FriendProfileComponent extends Unsub implements OnInit {
-  friend!: any;
+  friend: User;
   friendId: number = 0;
-  queryParams!: string;
+  queryParams: string;
   numberOfPosts = 5;
   skipPosts = 0;
 
-  constructor(private route: ActivatedRoute, private postService: PostService) {
+  constructor(
+    private route: ActivatedRoute,
+    private postService: PostService,
+    private friendService: FriendService
+  ) {
     super();
   }
 
@@ -32,8 +37,13 @@ export class FriendProfileComponent extends Unsub implements OnInit {
     this.postService
       .getAllPosts(this.queryParams)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((friend:any) => {
-        this.friend = friend;
-      });
+      .subscribe();
+    this.friendId &&
+      this.friendService
+        .getFriendById(this.friendId)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((friend: User) => {
+          this.friend = friend;
+        });
   }
 }

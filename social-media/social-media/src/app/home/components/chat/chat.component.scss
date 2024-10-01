@@ -31,10 +31,22 @@ ion-card-header {
   margin-left: 30px;
 }
 
-.chat-avatar {
-  width: 100px;
-  height: 100px;
+.chat-item {
+  display: flex;
+  align-items: center;
   padding: 10px;
+}
+
+.chat-avatar {
+  width: 80px;
+  height: 80px;
+  padding: 10px;
+  flex-shrink: 0;
+  margin-right: 10px;
+  @media (max-width: 500px) {
+    width: 60px;
+    height: 60px;
+  }
 }
 
 .chat-avatar-with-margin {
@@ -43,4 +55,16 @@ ion-card-header {
 
 ion-input {
   text-indent: 10px;
+}
+
+.chat-label {
+  flex: 1;
+  font-size: 14px;
+  white-space: normal;
+  overflow-wrap: break-word;
+  max-width: calc(100% - 70px);
+  margin: 0;
+  @media (max-width: 790px) {
+    font-size: 12px;
+  }
 }

@@ -1,8 +1,7 @@
 <div class="content-container">
   <app-profile ></app-profile>
   <div>
-    <app-post (create)="onCreatePost($event)"></app-post>
-    <div class="item-divider post-divider"></div>
+    <app-post  (create)="onCreatePost($event)"></app-post>
     <app-all-posts [postBody]="body"></app-all-posts>
   </div>
   <app-advertising class="ion-hide-xl-down"></app-advertising>

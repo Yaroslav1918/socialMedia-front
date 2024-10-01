@@ -4,6 +4,7 @@ ion-card {
   border: 1px solid #e1e1e1;
    @media (max-width: 1200px) {
     width: 100%;
+    margin: 0px
   }
 }
 
@@ -24,4 +25,8 @@ ion-avatar {
 
 ion-card-title {
   text-align: center;
+}
+
+ion-card-content {
+  text-align: center; 
 }
