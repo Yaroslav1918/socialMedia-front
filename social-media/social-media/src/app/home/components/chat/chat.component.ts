@@ -83,8 +83,8 @@ export class ChatComponent extends Unsub implements OnInit, OnDestroy {
     this.authService
       .getUserImage()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((userImageUrl: string | null) => {
-        this.userImageUrl = userImageUrl;
+      .subscribe(({ imageUrl }) => {
+        this.userImageUrl = imageUrl;
       });
 
     this.chatService
@@ -122,11 +122,13 @@ export class ChatComponent extends Unsub implements OnInit, OnDestroy {
         }
       });
 
-    this.friend$.pipe(takeUntil(this.unsubscribe$)).subscribe((friend: any) => {
-      if (friend !== null && this.friend.id) {
-        this.chatService.joinConversation(this.friend.id);
-      }
-    });
+    this.friend$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((friend: User | null) => {
+        if (friend !== null && this.friend.id) {
+          this.chatService.joinConversation(this.friend.id);
+        }
+      });
 
     this.friendService
       .getAllFriends()
@@ -176,8 +178,8 @@ export class ChatComponent extends Unsub implements OnInit, OnDestroy {
     this.authService
       .getUserImage(userId)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((userImageUrl: string) => {
-        this.friendImage = userImageUrl;
+      .subscribe(({ imageUrl }) => {
+        this.friendImage = imageUrl;
       });
   }
 

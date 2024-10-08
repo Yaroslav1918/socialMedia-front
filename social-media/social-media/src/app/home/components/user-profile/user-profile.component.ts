@@ -8,8 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class UserProfileComponent implements OnInit {
   body = "";
   constructor() {}
-  onCreatePost(body: string) {
-    this.body = body;
+  onCreatePost(postData: string): void {
+    this.body = postData;
   }
   ngOnInit() {}
 }

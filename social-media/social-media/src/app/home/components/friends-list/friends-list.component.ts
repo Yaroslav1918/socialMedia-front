@@ -47,10 +47,8 @@ export class FriendsListComponent extends Unsub implements OnInit, OnChanges {
           return of({ error: true });
         })
       )
-      .subscribe(({ error }) => {
-        if (!error) {
+      .subscribe(() => {
           this.connectedFriends.add(friendId);
-        }
         setTimeout(() => {
           this.popoverController.dismiss();
         }, 1000);

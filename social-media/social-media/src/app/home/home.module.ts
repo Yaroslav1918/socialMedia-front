@@ -12,7 +12,6 @@ import { AdvertisingComponent } from './components/advertising/advertising.compo
 import { ProfileComponent } from './components/profile/profile.component';
 import { ModalComponent } from './components/post/modal/modal.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { AllPostsComponent } from './components/all-posts/all-posts.component';
 import { ChatComponent } from './components/chat/chat.component';
@@ -32,7 +31,6 @@ import { FriendProfileComponent } from './components/friend-profile/friend-profi
     ProfileComponent,
     ModalComponent,
     WelcomeComponent,
-    FooterComponent,
     UserProfileComponent,
     AllPostsComponent,
     ChatComponent,

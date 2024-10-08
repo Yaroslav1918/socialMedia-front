@@ -5,7 +5,7 @@ import { map, takeUntil } from "rxjs";
 import { Unsub } from "../../../core/unsub.class";
 import { FriendService } from "../../services/friend.service";
 import { ChatService } from "../../services/chat.service";
-import { FriendRequest } from "../../../auth/models/friendRequest.model";
+import { FriendResponse } from "../../../auth/models/friendResponse.model";
 import { AuthService } from "./../../../auth/services/auth.service";
 import { PopoverComponent } from "./popover/popover.component";
 import { UnreadMessages } from "../../models/unreadMessages.model";
@@ -46,8 +46,7 @@ export class HeaderComponent extends Unsub implements OnInit {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((isLoggedIn) => {
         if (isLoggedIn) {
-          this.authService
-            .getUserImage()
+          this.authService.userFullImagePath
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((imageUrl: string | null) => {
               this.imageUrl = imageUrl;
@@ -69,7 +68,7 @@ export class HeaderComponent extends Unsub implements OnInit {
           this.friendService
             .getAllRequestsFriend()
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((friendsList: FriendRequest[]) => {
+            .subscribe((friendsList: FriendResponse[]) => {
               this.friendRequestCount = friendsList.filter(
                 (friend) =>
                   friend.status === "pending" &&
@@ -84,7 +83,7 @@ export class HeaderComponent extends Unsub implements OnInit {
     this.isOpen = true;
   }
 
-  async presentPopover(ev: any) {
+  async presentPopover(ev: Event) {
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       cssClass: "popover-header",
@@ -94,8 +93,8 @@ export class HeaderComponent extends Unsub implements OnInit {
     await popover.present();
   }
 
-  searchFriends(event: any) {
-    const query = event.target.value;
+  searchFriends(event: Event) {
+    const query = (event.target as HTMLInputElement).value;
     this.searchQuery = query;
     if (query) {
       this.presentFriendsPopover(event);

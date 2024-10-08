@@ -76,11 +76,12 @@ export class ProfileComponent extends Unsub implements OnInit, OnChanges {
 
   private loadUserImage(): void {
     if (this.friendId) {
+      console.log("🚀 ~ ProfileComponent ~ loadUserImage ~ this.friendId:", this.friendId)
       this.authService
         .getUserImage(this.friendId)
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((fullImagePath: string) => {
-          this.imageUrl = fullImagePath;
+        .subscribe(({ imageUrl }) => {
+          this.imageUrl = imageUrl;
         });
       return;
     }
@@ -89,22 +90,24 @@ export class ProfileComponent extends Unsub implements OnInit, OnChanges {
       this.authService
         .getUserImage(this.user.id)
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((fullImagePath: string) => {
-          this.imageUrl = fullImagePath;
+        .subscribe(({ imageUrl }) => {
+          this.imageUrl = imageUrl;
         });
       return;
     }
     this.authService
       .getUserImage()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((fullImagePath: string) => {
-        this.imageUrl = fullImagePath;
+      .subscribe(({ imageUrl }) => {
+        console.log("🚀 ~ ProfileComponent ~ .subscribe ~ imageUrl:", imageUrl)
+        this.imageUrl = imageUrl;
       });
   }
 
-  onFileSelect(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
+  onFileSelect(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file: File = input.files[0];
       this.fileName = file.name;
       const formData = new FormData();
       formData.append("file", file);
@@ -115,7 +118,7 @@ export class ProfileComponent extends Unsub implements OnInit, OnChanges {
           this.authService
             .getUserImage()
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((imageUrl: string) => {
+            .subscribe(({ imageUrl }) => {
               this.imageUrl = imageUrl;
               this.authService.setImageUrl(imageUrl);
             });

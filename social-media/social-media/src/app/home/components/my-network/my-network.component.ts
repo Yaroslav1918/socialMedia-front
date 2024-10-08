@@ -13,7 +13,7 @@ import { FriendService } from "../../services/friend.service";
 })
 export class MyNetworkComponent extends Unsub implements OnInit {
   friendList: User[] = [];
-  popoverEvent: any;
+  popoverEvent: Event;
   isPopoverOpen: boolean = false;
   constructor(private friendService: FriendService, private router: Router) {
     super();
@@ -32,7 +32,7 @@ export class MyNetworkComponent extends Unsub implements OnInit {
      this.router.navigate([`/home/chat/${friendId}`]);
   }
 
-  presentPopover(event: any, friend: any) {
+  presentPopover(event: Event) {
     this.isPopoverOpen = true;
     this.popoverEvent = event;
   }

@@ -5,7 +5,7 @@ import { Unsub } from "../../../core/unsub.class";
 import { FriendService } from "../../services/friend.service";
 import { User } from "../../../auth/models/user.model";
 import { AuthService } from "../../../auth/services/auth.service";
-import { FriendRequest } from "../../../auth/models/friendRequest.model";
+import { FriendResponse } from "../../../auth/models/friendResponse.model";
 import { Message } from "../../models/message.model";
 
 @Component({
@@ -14,7 +14,7 @@ import { Message } from "../../models/message.model";
   styleUrls: ["./notifications.component.scss"],
 })
 export class NotificationsComponent extends Unsub implements OnInit {
-  friendList: FriendRequest[] = [];
+  friendList: FriendResponse[] = [];
   currentUserId: number = 0;
   unreadMessages: Message[] = [];
 
@@ -37,7 +37,7 @@ export class NotificationsComponent extends Unsub implements OnInit {
     this.friendService
       .getAllRequestsFriend()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((friendsList: FriendRequest[]) => {
+      .subscribe((friendsList: FriendResponse[]) => {
         this.friendList = friendsList.filter(
           (friend) =>
             friend.status === "pending" &&

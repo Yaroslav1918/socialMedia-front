@@ -12,7 +12,7 @@ import { Unsub } from "../../../core/unsub.class";
   styleUrls: ["./post.component.scss"],
 })
 export class PostComponent extends Unsub implements OnInit {
-  @Output() create: EventEmitter<any> = new EventEmitter();
+  @Output() create: EventEmitter<string> = new EventEmitter();
   imageUrl: string | null = null;
   fullName = "";
   canEmitCreate: boolean = true;

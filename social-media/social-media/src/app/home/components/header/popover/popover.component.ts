@@ -5,7 +5,7 @@ import { AuthService } from "./../../../../auth/services/auth.service";
 import { map, takeUntil } from "rxjs";
 import { Unsub } from "../../../../core/unsub.class";
 import { UnreadMessages } from "../../../models/unreadMessages.model";
-import { FriendRequest } from "../../../../auth/models/friendRequest.model";
+import { FriendResponse } from "../../../../auth/models/friendResponse.model";
 import { ChatService } from "../../../services/chat.service";
 import { FriendService } from "../../../services/friend.service";
 
@@ -46,7 +46,7 @@ export class PopoverComponent extends Unsub implements OnInit {
           this.authService
             .getUserImage()
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((imageUrl: string | null) => {
+            .subscribe(({ imageUrl }) => {
               this.imageUrl = imageUrl;
             });
         }
@@ -73,7 +73,7 @@ export class PopoverComponent extends Unsub implements OnInit {
     this.friendService
       .getAllRequestsFriend()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((friendsList: FriendRequest[]) => {
+      .subscribe((friendsList: FriendResponse[]) => {
         this.friendRequestCount = friendsList.filter(
           (friend) =>
             friend.status === "pending" && friend.creator.id !== this.userId
@@ -86,7 +86,7 @@ export class PopoverComponent extends Unsub implements OnInit {
     this.dismissPopover();
   }
 
-  async presentPopover(ev: any) {
+  async presentPopover(ev: Event) {
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       cssClass: "popover-header",

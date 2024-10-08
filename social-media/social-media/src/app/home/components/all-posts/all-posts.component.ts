@@ -43,7 +43,6 @@ export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
 
   ngOnInit() {
     this.getPosts(false);
-
     this.authService.userId
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((userId: number | null) => {
@@ -58,7 +57,7 @@ export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
           this.authService
             .getUserImage()
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((imageUrl: string | null) => {
+            .subscribe(({ imageUrl }) => {
               this.imageUrl = imageUrl;
             });
         }

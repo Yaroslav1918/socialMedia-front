@@ -23,7 +23,6 @@ import { ToastService } from "../../core/toast.service";
 import { ChatService } from "../../home/services/chat.service";
 import { User } from "../models/user.model";
 import { environment } from "./../../../environments/environment.prod";
-import { NewUser } from "../../home/models/newUser.model";
 
 @Injectable({
   providedIn: "root",
@@ -41,7 +40,7 @@ export class AuthService {
   ) {
     this.isTokenInStorage().subscribe((isLoggedIn) => {
       if (isLoggedIn) {
-        this.getUserImage().subscribe((imageUrl: string | null) => {
+        this.getUserImage().subscribe(({ imageUrl }) => {
           this.imageUrl$.next(imageUrl);
         });
       }
@@ -76,7 +75,7 @@ export class AuthService {
       .post<User>(`${environment.baseApiUrl}/auth/register`, newUser)
       .pipe(
         take(1),
-        catchError((error: any) => {
+        catchError((error) => {
           this.toastService.presentToast(error.error.message);
           return throwError(() => error);
         })
@@ -103,7 +102,7 @@ export class AuthService {
           this.user$.next(decodedToken);
           this.isLoggedInSubject.next(true);
         }),
-        catchError((error: any) => {
+        catchError((error) => {
           this.toastService.presentToast(error.error.message);
           return throwError(() => error);
         })
@@ -122,18 +121,8 @@ export class AuthService {
           new Date() > new Date(jwtExpirationInMsSinceUnixEpoch);
         if (isExpired) return of(false);
         this.isLoggedInSubject.next(true);
-        return this.getUserImage().pipe(
-          tap((imageUrl: string | null) => {
-            if (imageUrl && decodedToken) {
-              const userWithImage: UserResponse = {
-                ...decodedToken,
-                imagePath: imageUrl,
-              };
-              this.user$.next(userWithImage);
-            }
-          }),
-          map(() => true)
-        );
+        this.user$.next(decodedToken);
+        return of(true);;
       })
     );
   }
@@ -162,17 +151,12 @@ export class AuthService {
       );
   }
 
-  getUserImage(userId?: number) {
+  getUserImage(userId?: number): Observable<{ imageUrl: string }> {
     let url = `${environment.baseApiUrl}/users/image`;
     if (userId) {
       url += `?userId=${userId}`;
     }
-    return this.http.get(url, { responseType: "blob" }).pipe(
-      map((data) => {
-        return URL.createObjectURL(data);
-      }),
-      take(1)
-    );
+    return this.http.get<{ imageUrl: string }>(url).pipe(take(1));
   }
 
   setImageUrl(imageUrl: string) {

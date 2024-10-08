@@ -4,6 +4,7 @@ import { takeUntil } from "rxjs";
 
 import { ChatService } from "./home/services/chat.service";
 import { Unsub } from "./core/unsub.class";
+import { ToastService } from "./core/toast.service";
 
 @Component({
   selector: "app-root",
@@ -13,7 +14,8 @@ import { Unsub } from "./core/unsub.class";
 export class AppComponent extends Unsub implements OnInit, OnDestroy {
   constructor(
     private chatService: ChatService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastService: ToastService
   ) {
     super();
   }
@@ -26,7 +28,9 @@ export class AppComponent extends Unsub implements OnInit, OnDestroy {
           try {
             await this.chatService.initializeSocket();
           } catch (error) {
-            console.error("Failed to initialize chat service:", error);
+            this.toastService.presentToast(
+              "Unable to connect to chat. Please try again later."
+            );
           }
         }
       });

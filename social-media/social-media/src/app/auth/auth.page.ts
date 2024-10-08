@@ -54,9 +54,10 @@ export class AuthPage extends Unsub implements OnInit {
     this.router.navigate(["/auth", this.submissionType]);
   }
 
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    if (file) {
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file: File = input.files[0];
       this.selectedFile = file;
     }
   }
