@@ -46,9 +46,10 @@ export class HeaderComponent extends Unsub implements OnInit {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((isLoggedIn) => {
         if (isLoggedIn) {
-          this.authService.userFullImagePath
+          this.authService
+            .userFullImagePath
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((imageUrl: string | null) => {
+            .subscribe((imageUrl) => {
               this.imageUrl = imageUrl;
             });
 

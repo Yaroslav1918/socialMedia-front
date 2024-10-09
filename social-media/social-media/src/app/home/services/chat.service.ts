@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Socket, SocketIoConfig } from "ngx-socket-io";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, EMPTY, Observable } from "rxjs";
 
 import { User } from "../../auth/models/user.model";
 import { Storage } from "@capacitor/storage";
@@ -50,7 +50,7 @@ export class ChatService {
 
   fromEvent<T>(eventName: string): Observable<T> {
     if (!this.socket) {
-      throw new Error("Socket not initialized");
+      return EMPTY;
     }
     return this.socket.fromEvent<T>(eventName);
   }

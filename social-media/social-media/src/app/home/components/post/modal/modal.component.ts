@@ -24,7 +24,7 @@ export class ModalComponent extends Unsub implements OnInit {
 
   ngOnInit() {
     this.authService
-      .getImageUrl()
+      .userFullImagePath
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((imageUrl: string | null) => {
         this.imageUrl = imageUrl;

@@ -5,13 +5,16 @@ import {
   OnInit,
   SimpleChanges,
 } from "@angular/core";
-import { BehaviorSubject, takeUntil } from "rxjs";
+import { BehaviorSubject, take, takeUntil } from "rxjs";
+import { Storage } from "@capacitor/storage";
 
 import { AuthService } from "../../../auth/services/auth.service";
 import { User } from "../../../auth/models/user.model";
 import { Unsub } from "../../../core/unsub.class";
 import { FriendService } from "../../services/friend.service";
 import { ActivatedRoute } from "@angular/router";
+import { ToastService } from "../../../core/toast.service";
+import { UserResponse } from "../../../auth/models/userResponse.model";
 
 @Component({
   selector: "app-profile",
@@ -30,7 +33,8 @@ export class ProfileComponent extends Unsub implements OnInit, OnChanges {
   constructor(
     private authService: AuthService,
     private friendService: FriendService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastService: ToastService
   ) {
     super();
   }
@@ -76,7 +80,6 @@ export class ProfileComponent extends Unsub implements OnInit, OnChanges {
 
   private loadUserImage(): void {
     if (this.friendId) {
-      console.log("🚀 ~ ProfileComponent ~ loadUserImage ~ this.friendId:", this.friendId)
       this.authService
         .getUserImage(this.friendId)
         .pipe(takeUntil(this.unsubscribe$))
@@ -99,7 +102,6 @@ export class ProfileComponent extends Unsub implements OnInit, OnChanges {
       .getUserImage()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(({ imageUrl }) => {
-        console.log("🚀 ~ ProfileComponent ~ .subscribe ~ imageUrl:", imageUrl)
         this.imageUrl = imageUrl;
       });
   }
@@ -108,20 +110,34 @@ export class ProfileComponent extends Unsub implements OnInit, OnChanges {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file: File = input.files[0];
+      const validFileTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (!validFileTypes.includes(file.type)) {
+        this.toastService.presentToast(
+          "Only JPEG, JPG, and PNG image formats are allowed."
+        );
+        return;
+      }
       this.fileName = file.name;
       const formData = new FormData();
       formData.append("file", file);
       this.authService
         .uploadUserImage(formData)
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(() => {
-          this.authService
-            .getUserImage()
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(({ imageUrl }) => {
-              this.imageUrl = imageUrl;
-              this.authService.setImageUrl(imageUrl);
+        .subscribe(async ({ imageUrl }) => {
+          this.imageUrl = imageUrl;
+          const user = await Storage.get({ key: "user" });
+          const storedUser: UserResponse = user.value
+            ? JSON.parse(user.value)
+            : null;
+          if (storedUser) {
+            const updatedUser = { ...storedUser, imagePath: imageUrl };
+
+            await Storage.set({
+              key: "user",
+              value: JSON.stringify(updatedUser),
             });
+            this.authService.user$.next(updatedUser);
+          }
         });
     }
   }

@@ -9,9 +9,7 @@ import {
   catchError,
   distinctUntilChanged,
   from,
-  map,
   of,
-  shareReplay,
   switchMap,
   take,
   tap,
@@ -28,8 +26,7 @@ import { environment } from "./../../../environments/environment.prod";
   providedIn: "root",
 })
 export class AuthService {
-  private user$ = new BehaviorSubject<User | null>(null);
-  private imageUrl$ = new BehaviorSubject<string | null>(null);
+  public user$ = new BehaviorSubject<User | null>(null);
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -38,17 +35,15 @@ export class AuthService {
     private toastService: ToastService,
     private chatService: ChatService
   ) {
-    this.isTokenInStorage().subscribe((isLoggedIn) => {
-      if (isLoggedIn) {
-        this.getUserImage().subscribe(({ imageUrl }) => {
-          this.imageUrl$.next(imageUrl);
-        });
-      }
-    });
+    this.initializeUser();
   }
 
-  public isTokenExist(): Observable<boolean> {
-    return this.isLoggedInSubject.asObservable();
+  private async initializeUser() {
+    const user = await Storage.get({ key: "user" });
+    const storedUser: UserResponse = user.value ? JSON.parse(user.value) : null;
+    if (storedUser) {
+      this.user$.next(storedUser);
+    }
   }
 
   get isUserLoggedIn(): Observable<boolean> {
@@ -56,10 +51,6 @@ export class AuthService {
       distinctUntilChanged(),
       switchMap((user) => of(user !== null))
     );
-  }
-
-  getImageUrl(): Observable<string | null> {
-    return this.imageUrl$.asObservable();
   }
 
   get userId(): Observable<number | null> {
@@ -99,6 +90,11 @@ export class AuthService {
             value: response.access_token,
           });
           const decodedToken: UserResponse = jwtDecode(response.access_token);
+          await Storage.set({
+            key: "user",
+            value: JSON.stringify(decodedToken),
+          });
+
           this.user$.next(decodedToken);
           this.isLoggedInSubject.next(true);
         }),
@@ -114,15 +110,13 @@ export class AuthService {
       switchMap((tokenData) => {
         const token = tokenData.value;
         if (!token) return of(false);
-
         const decodedToken: UserResponse = jwtDecode(token);
         const jwtExpirationInMsSinceUnixEpoch = decodedToken.exp * 1000;
         const isExpired =
           new Date() > new Date(jwtExpirationInMsSinceUnixEpoch);
         if (isExpired) return of(false);
         this.isLoggedInSubject.next(true);
-        this.user$.next(decodedToken);
-        return of(true);;
+        return of(true);
       })
     );
   }
@@ -130,25 +124,16 @@ export class AuthService {
   logout(): void {
     this.user$.next(null);
     Storage.remove({ key: "token" });
+    Storage.remove({ key: "user" });
     this.chatService.disconnect();
     this.router.navigateByUrl("/auth/login");
   }
 
-  uploadUserImage(formData: FormData): Observable<Blob> {
-    return this.http
-      .post(`${environment.baseApiUrl}/users/upload`, formData, {
-        responseType: "blob",
-      })
-      .pipe(
-        tap((response: Blob) => {
-          let user = this.user$.value;
-          if (user) {
-            const urlImage = URL.createObjectURL(response);
-            user.imagePath = urlImage;
-            this.user$.next(user);
-          }
-        })
-      );
+  uploadUserImage(formData: FormData): Observable<{ imageUrl: string }> {
+    return this.http.post<{ imageUrl: string }>(
+      `${environment.baseApiUrl}/users/upload`,
+      formData
+    );
   }
 
   getUserImage(userId?: number): Observable<{ imageUrl: string }> {
@@ -157,10 +142,6 @@ export class AuthService {
       url += `?userId=${userId}`;
     }
     return this.http.get<{ imageUrl: string }>(url).pipe(take(1));
-  }
-
-  setImageUrl(imageUrl: string) {
-    this.imageUrl$.next(imageUrl);
   }
 
   get userFullImagePath(): Observable<string | null> {

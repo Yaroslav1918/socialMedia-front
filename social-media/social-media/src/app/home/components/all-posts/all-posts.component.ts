@@ -6,7 +6,7 @@ import {
   SimpleChanges,
 } from "@angular/core";
 import { InfiniteScrollCustomEvent, ModalController } from "@ionic/angular";
-import { BehaviorSubject, catchError, of, takeUntil } from "rxjs";
+import { BehaviorSubject, catchError, of, takeUntil, tap } from "rxjs";
 
 import { AuthService } from "./../../../auth/services/auth.service";
 import { PostService } from "../../services/post.service";
@@ -139,13 +139,14 @@ export class AllPostsComponent extends Unsub implements OnInit, OnChanges {
       .deletePost(postId)
       .pipe(
         takeUntil(this.unsubscribe$),
+        tap(() => {
+          this.posts = this.posts.filter((post: Post) => post.id !== postId);
+        }),
         catchError(({ error }) => {
           this.toastService.presentToast(error.message);
           return of({ error: true });
         })
       )
-      .subscribe(() => {
-        this.posts = this.posts.filter((post: Post) => post.id !== postId);
-      });
+      .subscribe();
   }
 }
