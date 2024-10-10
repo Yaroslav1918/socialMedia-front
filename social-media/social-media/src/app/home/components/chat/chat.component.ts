@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { BehaviorSubject, takeUntil } from "rxjs";
 
 import { ChatService } from "../../services/chat.service";
-import { User } from "@auth/models/user.model"; 
+import { User } from "../../../auth/models/user.model";
 import { AuthService } from "../../../auth/services/auth.service";
 import { Unsub } from "../../../core/unsub.class";
 import { environment } from "../../../../environments/environment.prod";

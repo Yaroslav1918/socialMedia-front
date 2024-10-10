@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { takeUntil } from "rxjs";
 import { Router } from "@angular/router";
 
-import { User } from "@auth/models/user.model"; 
+import { User } from "../../../auth/models/user.model";
 import { Unsub } from "../../../core/unsub.class";
 import { FriendService } from "../../services/friend.service";
 

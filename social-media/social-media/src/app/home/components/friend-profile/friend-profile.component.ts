@@ -5,7 +5,7 @@ import { takeUntil } from "rxjs";
 import { Unsub } from "../../../core/unsub.class";
 import { PostService } from "../../services/post.service";
 import { FriendService } from "../../services/friend.service";
-import { User } from "@auth/models/user.model"; 
+import { User } from "../../../auth/models/user.model";
 
 @Component({
   selector: "app-friend-profile",

@@ -3,7 +3,7 @@ import { takeUntil } from "rxjs";
 
 import { Unsub } from "../../../core/unsub.class";
 import { FriendService } from "../../services/friend.service";
-import { User } from "@auth/models/user.model"; 
+import { User } from "../../../auth/models/user.model";
 import { AuthService } from "../../../auth/services/auth.service";
 import { FriendResponse } from "../../../auth/models/friendResponse.model";
 import { Message } from "../../models/message.model";
