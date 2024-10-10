@@ -3,11 +3,14 @@ import { Injectable } from "@angular/core";
 import { Socket, SocketIoConfig } from "ngx-socket-io";
 import { BehaviorSubject, EMPTY, Observable } from "rxjs";
 
-import { User } from "../../auth/models/user.model";
+
 import { Storage } from "@capacitor/storage";
 import { Message } from "../models/message.model";
 import { UnreadMessages } from "../models/unreadMessages.model";
 import { Conversation } from "../models/conversation.model";
+import { User } from "../../auth/models/user.model";
+
+
 
 @Injectable({
   providedIn: "root",
