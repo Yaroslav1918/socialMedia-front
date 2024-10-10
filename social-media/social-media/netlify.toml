@@ -1,6 +1,6 @@
 [build]
   # Build command
-  command = "npm install --legacy-peer-deps && ng build --prod"
+  command = "npm install --force && ng build --prod"
   # Directory where your built project is located
    publish = "www"
 
