@@ -1,6 +1,6 @@
-import { User } from "./user.model";
+import { User } from "@auth/models/user.model";
 
-export interface UserResponse extends User  {
+export interface UserResponse extends User {
   exp: number;
   iat: number;
 }

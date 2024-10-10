@@ -8,7 +8,7 @@ import {
 import { catchError, Observable, of, takeUntil } from "rxjs";
 import { PopoverController } from "@ionic/angular";
 
-import { User } from "../../../auth/models/user.model";
+import { User } from "@auth/models/user.model"; 
 import { Unsub } from "../../../core/unsub.class";
 import { ToastService } from "../../../core/toast.service";
 import { FriendService } from "../../services/friend.service";

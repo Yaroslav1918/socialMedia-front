@@ -1,4 +1,4 @@
-import { User } from "../../auth/models/user.model";
+import { User } from "@auth/models/user.model";
 
 export interface Conversation {
   id?: number;

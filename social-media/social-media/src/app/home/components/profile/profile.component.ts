@@ -9,7 +9,7 @@ import { BehaviorSubject, take, takeUntil } from "rxjs";
 import { Storage } from "@capacitor/storage";
 
 import { AuthService } from "../../../auth/services/auth.service";
-import { User } from "../../../auth/models/user.model";
+import { User } from "@auth/models/user.model"; 
 import { Unsub } from "../../../core/unsub.class";
 import { FriendService } from "../../services/friend.service";
 import { ActivatedRoute } from "@angular/router";

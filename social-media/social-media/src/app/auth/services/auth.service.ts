@@ -19,7 +19,7 @@ import {
 import { UserResponse } from "../models/userResponse.model";
 import { ToastService } from "../../core/toast.service";
 import { ChatService } from "../../home/services/chat.service";
-import { User } from "../models/user.model";
+import { User } from "@auth/models/user.model"; 
 import { environment } from "./../../../environments/environment.prod";
 
 @Injectable({

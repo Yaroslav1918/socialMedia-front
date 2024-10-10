@@ -8,7 +8,7 @@ import { Storage } from "@capacitor/storage";
 import { Message } from "../models/message.model";
 import { UnreadMessages } from "../models/unreadMessages.model";
 import { Conversation } from "../models/conversation.model";
-import { User } from "../../auth/models/user.model";
+import { User } from "@auth/models/user.model"; 
 
 
 
