@@ -9,8 +9,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint",
-    "gh-pages": "ng build --base-href 'https://Yaroslav1918.github.io/socialMedia-front/' && npx ngh --dir=www/"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
