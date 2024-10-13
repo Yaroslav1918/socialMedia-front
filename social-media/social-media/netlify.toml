@@ -1,0 +1,11 @@
+[build]
+  # Build command
+  command = "npm install --force --legacy-peer-deps && ng build"
+   publish = "www"
+
+# Redirects can be added here if needed
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = true
