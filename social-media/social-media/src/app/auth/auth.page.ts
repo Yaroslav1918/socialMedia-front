@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 import { AuthService } from "./services/auth.service";
 import { Unsub } from "../core/unsub.class";
+import { takeUntil } from "rxjs";
 
 @Component({
   selector: "app-auth",
@@ -23,7 +24,7 @@ export class AuthPage extends Unsub implements OnInit {
   selectedFile: File | null = null;
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
+    this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe((params) => {
       this.submissionType = params["path"];
     });
   }
@@ -31,9 +32,12 @@ export class AuthPage extends Unsub implements OnInit {
   onSubmit() {
     const { email, password, firstName, lastName } = this.form.value;
     if (this.submissionType === "login") {
-      this.authService.signIn(email, password).subscribe(() => {
-        this.router.navigateByUrl("/home/feed");
-      });
+      this.authService
+        .signIn(email, password)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(() => {
+          this.router.navigateByUrl("/home/feed");
+        });
     } else if (this.submissionType === "join") {
       const formData = new FormData();
       formData.append("firstName", firstName);
@@ -44,7 +48,10 @@ export class AuthPage extends Unsub implements OnInit {
         formData.append("image", this.selectedFile);
       }
 
-      this.authService.signUp(formData).subscribe(() => this.toggleText());
+      this.authService
+        .signUp(formData)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(() => this.toggleText());
     }
     this.form.reset();
   }

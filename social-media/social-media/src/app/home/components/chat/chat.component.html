@@ -12,7 +12,11 @@
               }"
             >
               <ion-avatar slot="start">
-                <ion-img [src]="friend.imagePath"></ion-img>
+                <ion-img
+                  alt="friend avatar"
+                  loading="lazy"
+                  [src]="friend.imagePath"
+                ></ion-img>
               </ion-avatar>
               <ion-label
                 >{{ friend.firstName }} {{ friend.lastName }}</ion-label
@@ -36,7 +40,11 @@
               *ngIf="selectedFriend?.imagePath"
               class="chat-avatar chat-avatar-with-margin"
             >
-              <ion-img [src]="selectedFriend?.imagePath"></ion-img>
+              <ion-img
+                alt="friend avatar"
+                loading="lazy"
+                [src]="selectedFriend?.imagePath"
+              ></ion-img>
             </ion-avatar>
 
             <ion-card-header>
@@ -49,7 +57,11 @@
               <ion-list class="chat-list">
                 <ion-item *ngFor="let item of messages" class="chat-item">
                   <ion-avatar class="chat-avatar">
-                    <ion-img [src]="defineFullImagePath(item.user)"></ion-img>
+                    <ion-img
+                      alt="avatar"
+                      lazy="loading"
+                      [src]="defineFullImagePath(item.user)"
+                    ></ion-img>
                   </ion-avatar>
                   <ion-label class="chat-label">{{ item.message }}</ion-label>
                   <ion-badge

@@ -9,7 +9,7 @@
                 slot="start"
                 [routerLink]="['/home/friend-profile', friend.id]"
               >
-                <img [src]="friend.imagePath" alt="Profile Picture" />
+                <img [src]="friend.imagePath" alt="Profile Picture" lazy = "loading"  />
               </ion-avatar>
               <ion-label
                 >{{ friend.firstName }} {{ friend.lastName }}</ion-label
