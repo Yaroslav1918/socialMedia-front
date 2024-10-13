@@ -1,6 +1,6 @@
 [build]
   # Build command
-  command = "npm install --legacy-peer-deps && ng build"
+  command = "npm install --force --legacy-peer-deps && ng build"
    publish = "www"
 
 # Redirects can be added here if needed
