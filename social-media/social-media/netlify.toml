@@ -1,7 +1,7 @@
 [build]
   # Build command
   command = "npm install --legacy-peer-deps && ng build"
-   publish = "social-media/social-media/www"
+   publish = "www"
 
 # Redirects can be added here if needed
 [[redirects]]
