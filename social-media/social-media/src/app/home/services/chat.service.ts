@@ -26,7 +26,7 @@ export class ChatService {
     const token = tokenData.value;
     if (token) {
       const config: SocketIoConfig = {
-        url: environment.baseApiUrl,
+        url: environment.webSocketEndpoint,
         options: {
           transportOptions: {
             polling: {
