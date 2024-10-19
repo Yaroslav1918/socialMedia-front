@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  baseApiUrl: "http://localhost:3000/api",
+  baseApiUrl: "https://social-media-web-345f246ea60b.herokuapp.com/api",
   defaultAvatar: "https://ionicframework.com/docs/img/demos/avatar.svg",
-  webSocketEndpoint: "http://localhost:3000",
+  webSocketEndpoint: "https://social-media-web-345f246ea60b.herokuapp.com/api",
 };
 
 /*

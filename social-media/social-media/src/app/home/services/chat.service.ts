@@ -8,6 +8,7 @@ import { Message } from "../models/message.model";
 import { UnreadMessages } from "../models/unreadMessages.model";
 import { Conversation } from "../models/conversation.model";
 import { User } from "../../auth/models/user.model";
+import { environment } from "../../../environments/environment.prod";
 
 @Injectable({
   providedIn: "root",
@@ -25,7 +26,7 @@ export class ChatService {
     const token = tokenData.value;
     if (token) {
       const config: SocketIoConfig = {
-        url: "http://localhost:3000",
+        url: environment.baseApiUrl,
         options: {
           transportOptions: {
             polling: {
