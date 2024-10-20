@@ -1,3 +1,51 @@
+# LinkedIn Clone - Social Media App
+
+This project is a LinkedIn clone, a social media platform where users can create, update, and delete posts, send messages in real-time, and manage their network. The app is built using **Ionic Framework** with Angular, and integrates  for user authentication and image storage in Firebase. **Socket.IO** is used for real-time messaging functionality.
+
+## Table of Contents
+
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Setup Instructions](#setup-instructions)
+- [Firebase Configuration](#firebase-configuration)
+- [Deployed Links](#deployed-links)
+- [Running the App](#running-the-app)
+
+
+## Features
+
+- **User Authentication**: Sign up, login.
+- **Post Management**: Create, update, and delete posts (text).
+- **Real-time Messaging**: Chat with other users in real time using **Socket.IO**.
+- **Friend Network**: Add and manage connections (friend requests).
+- **Image Storage**: Upload profile pictures  using Firebase Storage.
+- **Responsive UI**: Optimized for both mobile and desktop using the Ionic framework.
+- **Notifications**: Users receive notifications for new messages, friend requests, etc.
+
+## Technologies Used
+
+- **Ionic Framework**: Frontend framework for building cross-platform apps.
+- **Angular**: Framework for building client-side web applications.
+- **NestJS**: Backend framework for building scalable server-side applications on backend part.
+- **PostgreSQL**: Database used for storing user data, posts, and messages.
+- **Heroku**: Hosting platform for the backend services.
+- **Firebase Storage**: Used exclusively for storing and managing user-uploaded images (profile pictures).
+- **Socket.IO**: For real-time, bi-directional communication between the client and server (used for chat).
+- **Capacitor**: For accessing native functionality on mobile devices.
+
+## Deployed Links
+
+- **Frontend**: Deployed on [Vercel](https://social-media-front-tmlm.vercel.app/home)
+- **Backend**: Deployed on [Heroku](https://social-media-web-345f246ea60b.herokuapp.com/api) and powered by NestJS with a PostgreSQL database.
+
+## Running the App
+To run the project locally or on a mobile device, ensure all the necessary dependencies are installed by running:
+npm install
+To start the development server and run the app locally, use the following command:
+ng serve
+
+## Project Structure
 
 ```
 social-media
