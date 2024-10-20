@@ -13,20 +13,19 @@
               lazy="loading"
             ></ion-img>
           </ion-avatar>
-        </ion-col>
-        <ion-col>
           <ion-card-title>{{ fullName }} </ion-card-title>
+
+          <ion-button
+            expand="block"
+            size="small"
+            fill="outline"
+            color="primary"
+            [routerLink]="['/home/feed']"
+            >View Profile</ion-button
+          >
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-button
-      expand="block"
-      size="small"
-      fill="outline"
-      color="primary"
-      [routerLink]="['/home/feed']"
-      >View Profile</ion-button
-    >
   </ion-card-header>
   <div class="item-divider"></div>
   <ion-list>
@@ -60,10 +59,9 @@
 
       <ion-label
         >Messaging
-        <ion-badge
-          color="danger"
-          >{{ unreadMessageCount }}</ion-badge
-        ></ion-label
+        <ion-badge color="danger">{{
+          unreadMessageCount
+        }}</ion-badge></ion-label
       >
     </ion-item>
 
@@ -77,10 +75,9 @@
 
       <ion-label
         >Notifications
-        <ion-badge
-          color="danger"
-          >{{ friendRequestCount }}</ion-badge
-        ></ion-label
+        <ion-badge color="danger">{{
+          friendRequestCount
+        }}</ion-badge></ion-label
       >
     </ion-item>
   </ion-list>

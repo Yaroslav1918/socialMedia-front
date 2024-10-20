@@ -11,7 +11,7 @@
         placeholder="Search friends..."
         color="tertiary"
         debounce="1000"
-        style="width: 250px"
+        style="width: 250px;padding: 0;"
         (ionInput)="searchFriends($event)"
       ></ion-searchbar>
       <ion-grid>
@@ -146,7 +146,7 @@
     </div>
   </ion-toolbar>
   <div>
-    <ion-popover #popover [isOpen]="isOpen" (didDismiss)="isOpen = false">
+    <ion-popover #popover [isOpen]="isOpen" part="backdrop" tabindex="-1" inert class="md backdrop-hide hydrated" (didDismiss)="isOpen = false">
       <ng-template>
         <app-friends-list [searchQuery]="searchQuery"></app-friends-list>
       </ng-template>

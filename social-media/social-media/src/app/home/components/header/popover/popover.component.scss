@@ -1,3 +1,7 @@
+ion-avatar {
+  margin: 0 auto;
+}
+
 .item-divider {
   border-bottom: 1px solid var(--ion-color-light-tint);
 }
@@ -8,23 +12,31 @@ ion-card-content p:hover {
 }
 
 ion-card-title {
+  margin-top: 15px;
   font-size: 15px;
+  text-align: center;
 }
 
 ion-item {
-  font-size: 12px;
+  font-size: 11px;
 }
 
 ion-label {
   display: flex !important;
+  align-items: center;
 }
 
 ion-badge {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 15px; 
-  width: 15px; 
+  height: 15px;
+  width: 15px;
   border-radius: 50%;
   margin-left: 2px;
+}
+
+ion-button {
+  width: 100%;
+  margin-top: 15px;
 }
