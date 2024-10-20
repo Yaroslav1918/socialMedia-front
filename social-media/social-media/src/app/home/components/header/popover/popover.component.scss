@@ -6,6 +6,25 @@ ion-card-content p:hover {
   text-decoration: underline;
   cursor: pointer;
 }
+
 ion-card-title {
-  font-size: 17px;
+  font-size: 15px;
+}
+
+ion-item {
+  font-size: 12px;
+}
+
+ion-label {
+  display: flex !important;
+}
+
+ion-badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15px; 
+  width: 15px; 
+  border-radius: 50%;
+  margin-left: 2px;
 }

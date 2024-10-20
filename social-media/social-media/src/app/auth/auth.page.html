@@ -12,7 +12,7 @@
     </ion-buttons>
   </div>
   <h2>Welcome to your professional community</h2>
-  <form #form="ngForm" (ngSubmit)="onSubmit()">
+  <form #form="ngForm" (ngSubmit)="onSubmit()" mode="md">
     <ion-card>
       <ng-container *ngIf="submissionType === 'join'">
         <ion-input

@@ -1,3 +1,8 @@
+.friend-list {
+  margin: 10px 0 0 10px;
+  padding: 0;
+}
+
 p {
   margin: 0 auto;
   color: #000;
@@ -24,6 +29,7 @@ p {
 
 ion-item {
   border: 1px solid var(--ion-color-border-color);
+  --inner-padding-end: 0;
 }
 
 ion-card-header {
@@ -35,6 +41,7 @@ ion-card-header {
   display: flex;
   align-items: center;
   padding: 10px;
+  border: none;
 }
 
 .chat-avatar {
@@ -67,4 +74,8 @@ ion-input {
   @media (max-width: 790px) {
     font-size: 12px;
   }
+}
+
+ion-note {
+  font-size: 9px;
 }

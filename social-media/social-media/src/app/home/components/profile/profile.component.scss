@@ -25,6 +25,9 @@ ion-avatar {
 
 ion-card-title {
   text-align: center;
+    @media (max-width: 480px) {
+    font-size: 17px;
+  }
 }
 
 ion-card-content {

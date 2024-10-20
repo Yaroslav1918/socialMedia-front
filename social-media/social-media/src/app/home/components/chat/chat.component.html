@@ -3,7 +3,7 @@
     <ion-grid>
       <ion-row>
         <ion-col size="12" size-md="4">
-          <ion-list>
+          <ion-list class="friend-list">
             <ion-item
               *ngFor="let friend of friendList; let i = index"
               (click)="selectFriend(friend, i)"
@@ -58,7 +58,7 @@
                 <ion-item *ngFor="let item of messages" class="chat-item">
                   <ion-avatar class="chat-avatar">
                     <ion-img
-                      alt="avatar"
+                      alt="avatar" 
                       lazy="loading"
                       [src]="defineFullImagePath(item.user)"
                     ></ion-img>

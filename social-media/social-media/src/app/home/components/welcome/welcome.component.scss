@@ -17,12 +17,16 @@ h1 {
     width: auto;
     justify-content: center;
   }
+    @media (max-width: 650px) {
+     margin: 90px 20px
+    
+  }
 }
 
-.home-containe {
-  display: flex;
-  justify-content: baseline;
-  align-items: center;
+.home-title {
+   @media (max-width: 650px) {
+     font-size: 25px;
+  }
 }
 
 form {
